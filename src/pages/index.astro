@@ -1,0 +1,352 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const categories = [
+	{ name: 'Camisetas', slug: 'camisetas' },
+	{ name: 'Shorts', slug: 'shorts' },
+	{ name: 'Conjuntos', slug: 'conjuntos' },
+	{ name: 'Chaquetas', slug: 'chaquetas' },
+	{ name: 'Medias', slug: 'medias' },
+	{ name: 'Polos', slug: 'polos' },
+	{ name: 'Petos', slug: 'petos' },
+	{ name: 'uniforme y peto', slug: 'combo-uniforme-peto' },
+	{ name: 'chaqueta y sudadera', slug: 'combo-chaqueta-sudadera' },
+];
+
+const products = [
+	{ name: 'Camiseta Pro', price: '$45' },
+	{ name: 'Short Elite', price: '$35' },
+	{ name: 'Conjunto Team', price: '$75' },
+	{ name: 'Camiseta Retro', price: '$50' },
+	{ name: 'Short Training', price: '$30' },
+	{ name: 'Conjunto Match', price: '$80' },
+	{ name: 'Camiseta Custom', price: '$55' },
+	{ name: 'Short Custom', price: '$40' },
+];
+
+const clients = Array.from({ length: 6 }).map((_, i) => ({
+	name: `Cliente ${i + 1}`,
+	image: `https://picsum.photos/seed/crs${i}/400/400`,
+}));
+---
+
+<Layout title="CRS Sport — Ropa deportiva personalizada">
+	<main class="min-h-screen bg-white text-black font-sans">
+		<!-- Top nav -->
+		<nav class="bg-black text-white text-center py-2 text-sm font-medium tracking-wide">
+			Dios es nuestro guia
+		</nav>
+		<!-- Header -->
+		<header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-black/10">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+				<a href="/" class="flex items-center">
+					<img src="/logo_principal.webp" alt="CRS Sport" class="h-12 w-auto max-h-12 object-contain" />
+				</a>
+				<nav class="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-wide">
+					<a href="#productos" class="hover:underline">Productos</a>
+					<a href="#personalizar" class="hover:underline">Personalizar</a>
+					<a href="#nosotros" class="hover:underline">Nosotros</a>
+					<a href="#contacto" class="hover:underline">Contacto</a>
+				</nav>
+				<div class="flex items-center gap-4">
+					<a href="https://wa.me/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-black text-white text-sm font-bold uppercase tracking-wide hover:bg-neutral-800 transition-all duration-300">
+						Cotizar
+					</a>
+				</div>
+			</div>
+		</header>
+
+		<!-- Hero -->
+		<section class="relative bg-black text-white overflow-hidden">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 lg:py-23 grid lg:grid-cols-2 gap-12 items-center">
+				<div>
+					<p class="text-sm uppercase tracking-[0.3em] text-white/70 mb-4">Ropa deportiva personalizada</p>
+					<h1 class="text-5xl sm:text-6xl lg:text-7xl font-black uppercase leading-none tracking-tight animate-fade-up">
+						Crack Sport
+					</h1>
+					<p class="mt-6 text-lg text-white/80 max-w-xl">
+						Diseña tu propia ropa deportiva. Camisetas, shorts y conjuntos hechos a tu medida, con tu nombre, número y estilo.
+					</p>
+					<div class="mt-10 flex flex-wrap gap-4">
+						<a href="#productos" class="inline-flex items-center justify-center px-8 py-4 bg-white text-black font-bold uppercase tracking-wide hover:bg-white/90 transition">Comprar ahora</a>
+						<a href="#personalizar" class="inline-flex items-center justify-center px-8 py-4 border border-white text-white font-bold uppercase tracking-wide hover:bg-white hover:text-black transition">Personalizar</a>
+					</div>
+				</div>
+				<div class="flex justify-center">
+					<video src="/gif_hero/gif_hero_01.mp4" autoplay muted loop class="w-full max-w-sm rounded-2xl object-contain" />
+				</div>
+			</div>
+		</section>
+
+		<!-- Categories -->
+		<section class="w-full pl-4 lg:pl-[calc((100vw-80rem)/2+2rem)] pr-4 py-8 sm:py-16">
+			<div class="flex items-center justify-between mb-6">
+				<h2 class="text-3xl sm:text-4xl font-black uppercase">Lo ultimo en diseños</h2>
+				<div class="flex gap-2">
+					<button data-prev="cat-slider" class="px-3 py-2 border border-black hover:bg-black hover:text-white">‹</button>
+					<button data-next="cat-slider" class="px-3 py-2 border border-black hover:bg-black hover:text-white">›</button>
+				</div>
+			</div>
+			<div id="cat-slider" class="flex gap-2 overflow-x-auto pb-4 scrollbar-hide snap-x">
+				{categories.map((c) => (
+					<a href={'#' + c.slug} class="group relative shrink-0 basis-[66%] sm:basis-[28%] aspect-[4/5] bg-black text-white flex items-end p-6 overflow-hidden snap-start">
+						<img src="/categorias/uniformes.jpg" alt="" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-70 transition" />
+
+					</a>
+				))}
+			</div>
+		</section>
+
+		<!-- Catalogo -->
+		<section id="catalogo" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
+			<h2 class="text-3xl sm:text-4xl font-black uppercase mb-6">Catálogo</h2>
+			<nav id="cat-nav" class="flex gap-2 overflow-x-auto pb-4 border-b border-black/10 mb-8 scrollbar-hide">
+				{categories.map((c, idx) => (
+					<a href={'#cat-' + c.slug} data-cat={'cat-' + c.slug} class={'shrink-0 px-5 py-2 text-sm font-bold uppercase tracking-wide border border-black ' + (idx === 0 ? 'bg-black text-white' : 'text-black hover:bg-black hover:text-white')}>{c.name}</a>
+				))}
+			</nav>
+
+			<div id="cat-camisetas" class="mb-12 scroll-mt-20 cat-section hidden">
+				<h3 class="text-xl font-bold uppercase mb-4">Camisetas</h3>
+				<div class="flex gap-6 overflow-x-auto pb-4 scrollbar-hide snap-x">
+					{Array.from({ length: 20 }).map((_, i) => (
+						<article class="group shrink-0 w-64">
+							<div class="aspect-square bg-neutral-100 flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:shadow-lg">
+								<img src="/logo_principal.webp" alt={'Camiseta '+(i+1)} class="w-1/2 object-contain opacity-60 group-hover:scale-105 transition duration-300" />
+							</div>
+							<div class="mt-3">
+	
+								<h4 class="font-medium">Producto {i + 1}</h4>
+								<p class="text-sm text-neutral-500">Personalizable</p>
+								<p class="mt-1 font-bold">$45</p>
+								<a href="https://wa.me/" target="_blank" rel="noopener" class="mt-3 inline-flex w-full items-center justify-center px-4 py-2 border border-black text-black text-xs font-bold uppercase tracking-wide hover:bg-black hover:text-white transition-all duration-300">Cotizar</a>
+							</div>
+						</article>
+					))}
+				</div>
+			</div>
+
+			<div id="cat-shorts" class="mb-12 scroll-mt-20 cat-section hidden">
+				<h3 class="text-xl font-bold uppercase mb-4">Shorts</h3>
+				<div class="flex gap-6 overflow-x-auto pb-4 scrollbar-hide snap-x">
+					{Array.from({ length: 20 }).map((_, i) => (
+						<article class="group shrink-0 w-64">
+							<div class="aspect-square bg-neutral-100 flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:shadow-lg">
+								<img src="/logo_principal.webp" alt={'Short '+(i+1)} class="w-1/2 object-contain opacity-60 group-hover:scale-105 transition duration-300" />
+							</div>
+							<div class="mt-3">
+	
+								<h4 class="font-medium">Producto {i + 1}</h4>
+								<p class="text-sm text-neutral-500">Personalizable</p>
+								<p class="mt-1 font-bold">$35</p>
+								<a href="https://wa.me/" target="_blank" rel="noopener" class="mt-3 inline-flex w-full items-center justify-center px-4 py-2 border border-black text-black text-xs font-bold uppercase tracking-wide hover:bg-black hover:text-white transition-all duration-300">Cotizar</a>
+							</div>
+						</article>
+					))}
+				</div>
+			</div>
+
+			<div id="cat-conjuntos" class="mb-12 scroll-mt-20 cat-section hidden">
+				<h3 class="text-xl font-bold uppercase mb-4">Conjuntos</h3>
+				<div class="flex gap-6 overflow-x-auto pb-4 scrollbar-hide snap-x">
+					{Array.from({ length: 20 }).map((_, i) => (
+						<article class="group shrink-0 w-64">
+							<div class="aspect-square bg-neutral-100 flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:shadow-lg">
+								<img src="/logo_principal.webp" alt={'Conjunto '+(i+1)} class="w-1/2 object-contain opacity-60 group-hover:scale-105 transition duration-300" />
+							</div>
+							<div class="mt-3">
+	
+								<h4 class="font-medium">Producto {i + 1}</h4>
+								<p class="text-sm text-neutral-500">Personalizable</p>
+								<p class="mt-1 font-bold">$75</p>
+								<a href="https://wa.me/" target="_blank" rel="noopener" class="mt-3 inline-flex w-full items-center justify-center px-4 py-2 border border-black text-black text-xs font-bold uppercase tracking-wide hover:bg-black hover:text-white transition-all duration-300">Cotizar</a>
+							</div>
+						</article>
+					))}
+				</div>
+			</div>
+
+			<div id="cat-accesorios" class="mb-12 scroll-mt-20 cat-section hidden">
+				<h3 class="text-xl font-bold uppercase mb-4">Accesorios</h3>
+				<div class="flex gap-6 overflow-x-auto pb-4 scrollbar-hide snap-x">
+					{Array.from({ length: 20 }).map((_, i) => (
+						<article class="group shrink-0 w-64">
+							<div class="aspect-square bg-neutral-100 flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:shadow-lg">
+								<img src="/logo_principal.webp" alt={'Accesorio '+(i+1)} class="w-1/2 object-contain opacity-60 group-hover:scale-105 transition duration-300" />
+							</div>
+							<div class="mt-3">
+	
+								<h4 class="font-medium">Producto {i + 1}</h4>
+								<p class="text-sm text-neutral-500">Personalizable</p>
+								<p class="mt-1 font-bold">$20</p>
+								<a href="https://wa.me/" target="_blank" rel="noopener" class="mt-3 inline-flex w-full items-center justify-center px-4 py-2 border border-black text-black text-xs font-bold uppercase tracking-wide hover:bg-black hover:text-white transition-all duration-300">Cotizar</a>
+							</div>
+						</article>
+					))}
+				</div>
+			</div>
+		</section>
+
+
+		<!-- Personalizar -->
+		<section id="personalizar" class="bg-black text-white py-10 sm:py-20">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
+				<div>
+					<h2 class="text-4xl sm:text-5xl font-black uppercase leading-tight">Diseña tu propio kit</h2>
+					<p class="mt-6 text-white/80">
+						Elegí colores, agregá tu nombre y número, y creamos la pieza perfecta para tu equipo o para vos.
+					</p>
+					<a href="#" class="mt-8 inline-flex items-center justify-center px-8 py-4 bg-white text-black font-bold uppercase tracking-wide hover:bg-white/90 transition">Empezar a diseñar</a>
+				</div>
+				<div class="grid grid-cols-2 gap-4">
+					<div class="aspect-square bg-white/10 flex items-center justify-center">
+						<span class="text-6xl font-black">10</span>
+					</div>
+					<div class="aspect-square bg-white/10 flex items-center justify-center">
+						<span class="text-6xl font-black">7</span>
+					</div>
+					<div class="aspect-square bg-white/10 flex items-center justify-center">
+						<span class="text-6xl font-black">9</span>
+					</div>
+					<div class="aspect-square bg-white/10 flex items-center justify-center">
+						<span class="text-6xl font-black">3</span>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Telas -->
+		<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-20">
+			<h2 class="text-3xl sm:text-4xl font-black uppercase mb-2">Calidad en Cada Fibra</h2>
+			<p class="text-neutral-600 mb-6">La comodidad y resistencia que tu equipo necesita.</p>
+			<div class="columns-2 sm:columns-3 gap-4">
+				{Array.from({ length: 5 }).map((_, i) => (
+					<img src={`https://picsum.photos/seed/tela${i}/400/400`} alt={`Tela ${i + 1}`} class="mb-4 w-full object-cover" />
+				))}
+			</div>
+		</section>
+
+		<!-- Nosotros -->
+		<section id="nosotros" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-20 text-center">
+			<h2 class="text-3xl sm:text-4xl font-black uppercase">Sobre CRS Sport</h2>
+			<p class="mt-6 max-w-2xl mx-auto text-neutral-600">
+				CRS Sport nace de la pasión por el deporte y el diseño. Creamos ropa deportiva personalizada de alta calidad para equipos, clubes y atletas que quieren destacar.
+			</p>
+		</section>
+
+		<!-- Nuestros clientes -->
+		<section class="bg-neutral-50 py-10 sm:py-20">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<h2 class="text-3xl sm:text-4xl font-black uppercase text-center mb-4">Nuestros clientes</h2>
+				<p class="text-center text-neutral-600 mb-12 max-w-2xl mx-auto">Equipos y atletas que ya lucen CRS Sport.</p>
+				<div class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x">
+					{clients.map((cl) => (
+						<div class="shrink-0 w-40 aspect-square overflow-hidden bg-neutral-200 group snap-start">
+							<img src={cl.image} alt={cl.name} class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500" />
+						</div>
+					))}
+				</div>
+			</div>
+		</section>
+
+		<!-- Footer -->
+		<footer id="contacto" class="border-t border-black/10 bg-neutral-50">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid sm:grid-cols-3 gap-8 text-sm">
+				<div>
+					<img src="/logo_principal.webp" alt="CRS Sport" class="h-20 w-auto object-contain mb-4" />
+					<p class="text-neutral-600">Ropa deportiva personalizada.</p>
+				</div>
+				<div>
+					<h4 class="font-bold uppercase tracking-wide mb-3">Navegación</h4>
+					<ul class="space-y-2 text-neutral-600">
+						<li><a href="#productos" class="hover:text-black">Productos</a></li>
+						<li><a href="#personalizar" class="hover:text-black">Personalizar</a></li>
+						<li><a href="#nosotros" class="hover:text-black">Nosotros</a></li>
+					</ul>
+				</div>
+				<div>
+					<h4 class="font-bold uppercase tracking-wide mb-3">Contacto</h4>
+					<ul class="space-y-2 text-neutral-600">
+						<li>hola@crssport.com</li>
+						<li>@crssport</li>
+					</ul>
+				</div>
+			</div>
+			<div class="border-t border-black/10 py-4 text-center text-xs text-neutral-500">
+				© 2026 CRS Sport. Todos los derechos reservados.
+			</div>
+		</footer>
+	</main>
+	<style>
+		.scrollbar-hide::-webkit-scrollbar { display: none; }
+		.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+	</style>
+	<script>
+		document.querySelectorAll('[data-prev]').forEach((btn) => {
+			btn.addEventListener('click', () => {
+				const id = btn.getAttribute('data-prev');
+				const el = document.getElementById(id);
+				if (el) el.scrollBy({ left: -300, behavior: 'smooth' });
+			});
+		});
+		document.querySelectorAll('[data-next]').forEach((btn) => {
+			btn.addEventListener('click', () => {
+				const id = btn.getAttribute('data-next');
+				const el = document.getElementById(id);
+				if (el) el.scrollBy({ left: 300, behavior: 'smooth' });
+			});
+		});
+		// catalog tabs
+		const sections = document.querySelectorAll('.cat-section');
+		function showCat(id) {
+			sections.forEach((s) => s.classList.add('hidden'));
+			const target = document.getElementById(id);
+			if (target) target.classList.remove('hidden');
+		}
+		document.querySelectorAll('#cat-nav a[data-cat]').forEach((a) => {
+			a.addEventListener('click', (e) => {
+				e.preventDefault();
+				document.querySelectorAll('#cat-nav a[data-cat]').forEach((x) => {
+					x.classList.remove('bg-black','text-white');
+					x.classList.add('text-black');
+				});
+				a.classList.add('bg-black','text-white');
+				a.classList.remove('text-black');
+				showCat(a.getAttribute('data-cat'));
+			});
+		});
+		if (sections.length) {
+			showCat(sections[0].id);
+			const first = document.querySelector('#cat-nav a[data-cat]');
+			if (first) { first.classList.add('bg-black','text-white'); first.classList.remove('text-black'); }
+		}
+
+		// drag to scroll
+		document.querySelectorAll('.snap-x').forEach((slider) => {
+			let isDown = false, startX, scrollLeft;
+			slider.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; slider.style.cursor = 'grabbing'; });
+			slider.addEventListener('mouseleave', () => { isDown = false; slider.style.cursor = 'grab'; });
+			slider.addEventListener('mouseup', () => { isDown = false; slider.style.cursor = 'grab'; });
+			slider.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); const x = e.pageX - slider.offsetLeft; const walk = (x - startX) * 2; slider.scrollLeft = scrollLeft - walk; });
+			slider.style.cursor = 'grab';
+		});
+
+		// add nav buttons to each slider
+		document.querySelectorAll('.snap-x').forEach((slider, idx) => {
+			if (slider.id === 'cat-slider') return;
+			const wrap = document.createElement('div');
+			wrap.className = 'flex justify-end gap-2 mb-2';
+			const prev = document.createElement('button');
+			prev.textContent = '‹';
+			prev.className = 'px-3 py-1 border border-black hover:bg-black hover:text-white';
+			const next = document.createElement('button');
+			next.textContent = '›';
+			next.className = 'px-3 py-1 border border-black hover:bg-black hover:text-white';
+			prev.addEventListener('click', () => slider.scrollBy({ left: -300, behavior: 'smooth' }));
+			next.addEventListener('click', () => slider.scrollBy({ left: 300, behavior: 'smooth' }));
+			wrap.appendChild(prev);
+			wrap.appendChild(next);
+			slider.parentNode.insertBefore(wrap, slider);
+		});
+	</script>
+</Layout>
