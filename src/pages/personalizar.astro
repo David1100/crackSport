@@ -1,0 +1,94 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Personalizar uniforme - CRS Sport">
+	<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-20">
+		<h1 class="text-3xl sm:text-4xl font-black uppercase mb-2">Personaliza tu uniforme</h1>
+		<p class="text-neutral-600 mb-8">Diseña tu uniforme a medida: elige color, nombre, número y talla.</p>
+
+		<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+			<!-- Preview -->
+			<div class="bg-neutral-100 rounded-2xl p-6 flex items-center justify-center min-h-[400px]">
+				<div id="preview" class="relative w-64 aspect-[4/5] flex items-center justify-center">
+					<img id="preview-shirt" src="/categorias/uniformes.jpg" alt="Uniforme" class="w-full h-full object-cover rounded-xl" />
+					<div id="preview-overlay" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+						<span id="preview-name" class="text-2xl font-black uppercase text-white drop-shadow-lg">NOMBRE</span>
+						<span id="preview-number" class="text-5xl font-black text-white drop-shadow-lg">00</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- Form -->
+			<form id="customize-form" class="space-y-6">
+				<div>
+					<label class="block font-bold uppercase mb-2">Color principal</label>
+					<div class="flex gap-3">
+						<button type="button" data-color="#111827" class="color-btn w-10 h-10 rounded-full border-2 border-transparent" style="background:#111827"></button>
+						<button type="button" data-color="#dc2626" class="color-btn w-10 h-10 rounded-full border-2 border-transparent" style="background:#dc2626"></button>
+						<button type="button" data-color="#2563eb" class="color-btn w-10 h-10 rounded-full border-2 border-transparent" style="background:#2563eb"></button>
+						<button type="button" data-color="#16a34a" class="color-btn w-10 h-10 rounded-full border-2 border-transparent" style="background:#16a34a"></button>
+						<button type="button" data-color="#facc15" class="color-btn w-10 h-10 rounded-full border-2 border-transparent" style="background:#facc15"></button>
+					</div>
+				</div>
+
+				<div>
+					<label for="name" class="block font-bold uppercase mb-2">Nombre en la espalda</label>
+					<input id="name" type="text" maxlength="12" placeholder="Ej. GARCIA" class="w-full border border-neutral-300 rounded-lg px-4 py-2 uppercase" />
+				</div>
+
+				<div>
+					<label for="number" class="block font-bold uppercase mb-2">Número</label>
+					<input id="number" type="number" min="0" max="99" placeholder="10" class="w-full border border-neutral-300 rounded-lg px-4 py-2" />
+				</div>
+
+				<div>
+					<label for="size" class="block font-bold uppercase mb-2">Talla</label>
+					<select id="size" class="w-full border border-neutral-300 rounded-lg px-4 py-2">
+						<option>XS</option>
+						<option>S</option>
+						<option selected>M</option>
+						<option>L</option>
+						<option>XL</option>
+						<option>XXL</option>
+					</select>
+				</div>
+
+				<div>
+					<label for="qty" class="block font-bold uppercase mb-2">Cantidad</label>
+					<input id="qty" type="number" min="1" value="1" class="w-full border border-neutral-300 rounded-lg px-4 py-2" />
+				</div>
+
+				<button type="submit" class="w-full bg-black text-white font-bold uppercase py-3 rounded-lg hover:bg-neutral-800 transition">Agregar al carrito</button>
+			</form>
+		</div>
+	</section>
+
+	<script>
+		const nameInput = document.getElementById('name') as HTMLInputElement;
+		const numberInput = document.getElementById('number') as HTMLInputElement;
+		const previewName = document.getElementById('preview-name') as HTMLElement;
+		const previewNumber = document.getElementById('preview-number') as HTMLElement;
+		const previewShirt = document.getElementById('preview-shirt') as HTMLImageElement;
+		const colorBtns = document.querySelectorAll('.color-btn');
+
+		nameInput?.addEventListener('input', () => {
+			previewName.textContent = nameInput.value.toUpperCase() || 'NOMBRE';
+		});
+		numberInput?.addEventListener('input', () => {
+			previewNumber.textContent = numberInput.value || '00';
+		});
+		colorBtns.forEach((btn) => {
+			btn.addEventListener('click', () => {
+				const color = (btn as HTMLElement).dataset.color;
+				if (color) previewShirt.style.filter = `hue-rotate(0deg)`;
+				previewShirt.style.backgroundColor = color || '';
+			});
+		});
+
+		document.getElementById('customize-form')?.addEventListener('submit', (e) => {
+			e.preventDefault();
+			alert('Uniforme agregado al carrito (demo).');
+		});
+	</script>
+</Layout>

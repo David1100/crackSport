@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
+
 const categories = [
 	{ name: 'Camisetas', slug: 'camisetas' },
 	{ name: 'Shorts', slug: 'shorts' },
@@ -32,29 +33,7 @@ const clients = Array.from({ length: 6 }).map((_, i) => ({
 
 <Layout title="CRS Sport — Ropa deportiva personalizada">
 	<main class="min-h-screen bg-white text-black font-sans">
-		<!-- Top nav -->
-		<nav class="bg-black text-white text-center py-2 text-sm font-medium tracking-wide">
-			Dios es nuestro guia
-		</nav>
 		<!-- Header -->
-		<header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-black/10">
-			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-				<a href="/" class="flex items-center">
-					<img src="/logo_principal.webp" alt="CRS Sport" class="h-12 w-auto max-h-12 object-contain" />
-				</a>
-				<nav class="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-wide">
-					<a href="#productos" class="hover:underline">Productos</a>
-					<a href="#personalizar" class="hover:underline">Personalizar</a>
-					<a href="#nosotros" class="hover:underline">Nosotros</a>
-					<a href="#contacto" class="hover:underline">Contacto</a>
-				</nav>
-				<div class="flex items-center gap-4">
-					<a href="https://wa.me/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-black text-white text-sm font-bold uppercase tracking-wide hover:bg-neutral-800 transition-all duration-300">
-						Cotizar
-					</a>
-				</div>
-			</div>
-		</header>
 
 		<!-- Hero -->
 		<section class="relative bg-black text-white overflow-hidden">
@@ -69,7 +48,7 @@ const clients = Array.from({ length: 6 }).map((_, i) => ({
 					</p>
 					<div class="mt-10 flex flex-wrap gap-4">
 						<a href="#productos" class="inline-flex items-center justify-center px-8 py-4 bg-white text-black font-bold uppercase tracking-wide hover:bg-white/90 transition">Comprar ahora</a>
-						<a href="#personalizar" class="inline-flex items-center justify-center px-8 py-4 border border-white text-white font-bold uppercase tracking-wide hover:bg-white hover:text-black transition">Personalizar</a>
+						<a href="/personalizar" class="inline-flex items-center justify-center px-8 py-4 border border-white text-white font-bold uppercase tracking-wide hover:bg-white hover:text-black transition">Personalizar</a>
 					</div>
 				</div>
 				<div class="flex justify-center">
@@ -79,7 +58,7 @@ const clients = Array.from({ length: 6 }).map((_, i) => ({
 		</section>
 
 		<!-- Categories -->
-		<section class="w-full pl-4 lg:pl-[calc((100vw-80rem)/2+2rem)] pr-4 py-8 sm:py-16">
+		<section id="disenos" class="w-full pl-4 lg:pl-[calc((100vw-80rem)/2+2rem)] pr-4 py-8 sm:py-16">
 			<div class="flex items-center justify-between mb-6">
 				<h2 class="text-3xl sm:text-4xl font-black uppercase">Lo ultimo en diseños</h2>
 				<div class="flex gap-2">
@@ -87,114 +66,22 @@ const clients = Array.from({ length: 6 }).map((_, i) => ({
 					<button data-next="cat-slider" class="px-3 py-2 border border-black hover:bg-black hover:text-white">›</button>
 				</div>
 			</div>
-			<div id="cat-slider" class="flex gap-2 overflow-x-auto pb-4 scrollbar-hide snap-x">
-				{categories.map((c) => (
-					<a href={'#' + c.slug} class="group relative shrink-0 basis-[66%] sm:basis-[28%] aspect-[4/5] bg-black text-white flex items-end p-6 overflow-hidden snap-start">
-						<img src="/categorias/uniformes.jpg" alt="" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-70 transition" />
-
-					</a>
-				))}
-			</div>
+			<div id="cat-slider" class="flex gap-2 overflow-x-auto pb-4 scrollbar-hide snap-x"><div class="shrink-0 basis-[66%] sm:basis-[28%] aspect-[4/5] bg-neutral-200 animate-pulse"></div><div class="shrink-0 basis-[66%] sm:basis-[28%] aspect-[4/5] bg-neutral-200 animate-pulse"></div><div class="shrink-0 basis-[66%] sm:basis-[28%] aspect-[4/5] bg-neutral-200 animate-pulse"></div></div>
 		</section>
 
 		<!-- Catalogo -->
-		<section id="catalogo" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
+		<section id="productos" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
 			<h2 class="text-3xl sm:text-4xl font-black uppercase mb-6">Catálogo</h2>
-			<nav id="cat-nav" class="flex gap-2 overflow-x-auto pb-4 border-b border-black/10 mb-8 scrollbar-hide">
-				{categories.map((c, idx) => (
-					<a href={'#cat-' + c.slug} data-cat={'cat-' + c.slug} class={'shrink-0 px-5 py-2 text-sm font-bold uppercase tracking-wide border border-black ' + (idx === 0 ? 'bg-black text-white' : 'text-black hover:bg-black hover:text-white')}>{c.name}</a>
-				))}
-			</nav>
-
-			<div id="cat-camisetas" class="mb-12 scroll-mt-20 cat-section hidden">
-				<h3 class="text-xl font-bold uppercase mb-4">Camisetas</h3>
-				<div class="flex gap-6 overflow-x-auto pb-4 scrollbar-hide snap-x">
-					{Array.from({ length: 20 }).map((_, i) => (
-						<article class="group shrink-0 w-64">
-							<div class="aspect-square bg-neutral-100 flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:shadow-lg">
-								<img src="/logo_principal.webp" alt={'Camiseta '+(i+1)} class="w-1/2 object-contain opacity-60 group-hover:scale-105 transition duration-300" />
-							</div>
-							<div class="mt-3">
-	
-								<h4 class="font-medium">Producto {i + 1}</h4>
-								<p class="text-sm text-neutral-500">Personalizable</p>
-								<p class="mt-1 font-bold">$45</p>
-								<a href="https://wa.me/" target="_blank" rel="noopener" class="mt-3 inline-flex w-full items-center justify-center px-4 py-2 border border-black text-black text-xs font-bold uppercase tracking-wide hover:bg-black hover:text-white transition-all duration-300">Cotizar</a>
-							</div>
-						</article>
-					))}
-				</div>
-			</div>
-
-			<div id="cat-shorts" class="mb-12 scroll-mt-20 cat-section hidden">
-				<h3 class="text-xl font-bold uppercase mb-4">Shorts</h3>
-				<div class="flex gap-6 overflow-x-auto pb-4 scrollbar-hide snap-x">
-					{Array.from({ length: 20 }).map((_, i) => (
-						<article class="group shrink-0 w-64">
-							<div class="aspect-square bg-neutral-100 flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:shadow-lg">
-								<img src="/logo_principal.webp" alt={'Short '+(i+1)} class="w-1/2 object-contain opacity-60 group-hover:scale-105 transition duration-300" />
-							</div>
-							<div class="mt-3">
-	
-								<h4 class="font-medium">Producto {i + 1}</h4>
-								<p class="text-sm text-neutral-500">Personalizable</p>
-								<p class="mt-1 font-bold">$35</p>
-								<a href="https://wa.me/" target="_blank" rel="noopener" class="mt-3 inline-flex w-full items-center justify-center px-4 py-2 border border-black text-black text-xs font-bold uppercase tracking-wide hover:bg-black hover:text-white transition-all duration-300">Cotizar</a>
-							</div>
-						</article>
-					))}
-				</div>
-			</div>
-
-			<div id="cat-conjuntos" class="mb-12 scroll-mt-20 cat-section hidden">
-				<h3 class="text-xl font-bold uppercase mb-4">Conjuntos</h3>
-				<div class="flex gap-6 overflow-x-auto pb-4 scrollbar-hide snap-x">
-					{Array.from({ length: 20 }).map((_, i) => (
-						<article class="group shrink-0 w-64">
-							<div class="aspect-square bg-neutral-100 flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:shadow-lg">
-								<img src="/logo_principal.webp" alt={'Conjunto '+(i+1)} class="w-1/2 object-contain opacity-60 group-hover:scale-105 transition duration-300" />
-							</div>
-							<div class="mt-3">
-	
-								<h4 class="font-medium">Producto {i + 1}</h4>
-								<p class="text-sm text-neutral-500">Personalizable</p>
-								<p class="mt-1 font-bold">$75</p>
-								<a href="https://wa.me/" target="_blank" rel="noopener" class="mt-3 inline-flex w-full items-center justify-center px-4 py-2 border border-black text-black text-xs font-bold uppercase tracking-wide hover:bg-black hover:text-white transition-all duration-300">Cotizar</a>
-							</div>
-						</article>
-					))}
-				</div>
-			</div>
-
-			<div id="cat-accesorios" class="mb-12 scroll-mt-20 cat-section hidden">
-				<h3 class="text-xl font-bold uppercase mb-4">Accesorios</h3>
-				<div class="flex gap-6 overflow-x-auto pb-4 scrollbar-hide snap-x">
-					{Array.from({ length: 20 }).map((_, i) => (
-						<article class="group shrink-0 w-64">
-							<div class="aspect-square bg-neutral-100 flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:shadow-lg">
-								<img src="/logo_principal.webp" alt={'Accesorio '+(i+1)} class="w-1/2 object-contain opacity-60 group-hover:scale-105 transition duration-300" />
-							</div>
-							<div class="mt-3">
-	
-								<h4 class="font-medium">Producto {i + 1}</h4>
-								<p class="text-sm text-neutral-500">Personalizable</p>
-								<p class="mt-1 font-bold">$20</p>
-								<a href="https://wa.me/" target="_blank" rel="noopener" class="mt-3 inline-flex w-full items-center justify-center px-4 py-2 border border-black text-black text-xs font-bold uppercase tracking-wide hover:bg-black hover:text-white transition-all duration-300">Cotizar</a>
-							</div>
-						</article>
-					))}
-				</div>
-			</div>
+			<nav id="cat-nav" class="flex gap-2 overflow-x-auto pb-4 border-b border-black/10 mb-8 scrollbar-hide"></nav>
+			<div id="cat-container"></div>
 		</section>
-
-
 		<!-- Personalizar -->
 		<section id="personalizar" class="bg-black text-white py-10 sm:py-20">
 			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
 				<div>
 					<h2 class="text-4xl sm:text-5xl font-black uppercase leading-tight">Diseña tu propio kit</h2>
 					<p class="mt-6 text-white/80">
-						Elegí colores, agregá tu nombre y número, y creamos la pieza perfecta para tu equipo o para vos.
+						Elige colores, agrega tu nombre y número, y creamos la pieza perfecta para tu equipo o para vos.
 					</p>
 					<a href="#" class="mt-8 inline-flex items-center justify-center px-8 py-4 bg-white text-black font-bold uppercase tracking-wide hover:bg-white/90 transition">Empezar a diseñar</a>
 				</div>
@@ -216,13 +103,23 @@ const clients = Array.from({ length: 6 }).map((_, i) => ({
 		</section>
 
 		<!-- Telas -->
+
 		<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-20">
 			<h2 class="text-3xl sm:text-4xl font-black uppercase mb-2">Calidad en Cada Fibra</h2>
 			<p class="text-neutral-600 mb-6">La comodidad y resistencia que tu equipo necesita.</p>
-			<div class="columns-2 sm:columns-3 gap-4">
-				{Array.from({ length: 5 }).map((_, i) => (
-					<img src={`https://picsum.photos/seed/tela${i}/400/400`} alt={`Tela ${i + 1}`} class="mb-4 w-full object-cover" />
-				))}
+			<div id="telas-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-6"><div class="aspect-square bg-neutral-200 animate-pulse rounded"></div><div class="aspect-square bg-neutral-200 animate-pulse rounded"></div><div class="aspect-square bg-neutral-200 animate-pulse rounded"></div><div class="aspect-square bg-neutral-200 animate-pulse rounded"></div></div>
+
+		</section>
+
+		<!-- Combos -->
+		<section id="combos" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-20">
+			<h2 class="text-3xl sm:text-4xl font-black uppercase mb-2">Rendimiento y estilo en combo</h2>
+			<p class="text-neutral-600 mb-6">Equipamiento completo para tus entrenamientos con la comodidad y el precio que buscas.</p>
+			<div id="combos-slider" class="flex gap-2 overflow-x-auto pb-4 scrollbar-hide snap-x">
+				<div class="relative shrink-0 basis-[40%] overflow-hidden snap-start bg-neutral-200 animate-pulse aspect-[4/5]"></div>
+				<div class="relative shrink-0 basis-[40%] overflow-hidden snap-start bg-neutral-200 animate-pulse aspect-[4/5]"></div>
+				<div class="relative shrink-0 basis-[40%] overflow-hidden snap-start bg-neutral-200 animate-pulse aspect-[4/5]"></div>
+				<div class="relative shrink-0 basis-[40%] overflow-hidden snap-start bg-neutral-200 animate-pulse aspect-[4/5]"></div>
 			</div>
 		</section>
 
@@ -239,47 +136,48 @@ const clients = Array.from({ length: 6 }).map((_, i) => ({
 			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<h2 class="text-3xl sm:text-4xl font-black uppercase text-center mb-4">Nuestros clientes</h2>
 				<p class="text-center text-neutral-600 mb-12 max-w-2xl mx-auto">Equipos y atletas que ya lucen CRS Sport.</p>
-				<div class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x">
-					{clients.map((cl) => (
-						<div class="shrink-0 w-40 aspect-square overflow-hidden bg-neutral-200 group snap-start">
-							<img src={cl.image} alt={cl.name} class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500" />
-						</div>
-					))}
-				</div>
+				<div id="clients-slider" class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x"><div class="shrink-0 w-40 aspect-square bg-neutral-200 animate-pulse"></div><div class="shrink-0 w-40 aspect-square bg-neutral-200 animate-pulse"></div><div class="shrink-0 w-40 aspect-square bg-neutral-200 animate-pulse"></div></div>
 			</div>
 		</section>
 
+		<!-- Combo modal -->
+		<div id="combo-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 opacity-0 pointer-events-none transition-opacity duration-200">
+			<img id="combo-modal-img" src="" alt="" class="max-h-[90vh] max-w-[90vw] rounded" />
+			<button id="combo-modal-close" class="absolute top-4 right-4 bg-white text-black w-10 h-10 rounded-full font-bold">&times;</button>
+		</div>
+
+		<!-- Image modal -->
+		<div id="img-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 opacity-0 pointer-events-none transition-opacity duration-200">
+			<img id="img-modal-src" src="" alt="" class="max-h-[90vh] max-w-[90vw] rounded" />
+			<button id="img-modal-close" class="absolute top-4 right-4 bg-white text-black w-10 h-10 rounded-full font-bold">&times;</button>
+		</div>
+
 		<!-- Footer -->
-		<footer id="contacto" class="border-t border-black/10 bg-neutral-50">
-			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid sm:grid-cols-3 gap-8 text-sm">
-				<div>
-					<img src="/logo_principal.webp" alt="CRS Sport" class="h-20 w-auto object-contain mb-4" />
-					<p class="text-neutral-600">Ropa deportiva personalizada.</p>
+		<!-- Modal detalle tela -->
+		<div id="tela-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200">
+			<div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl mx-4 max-h-[90vh] overflow-y-auto scrollbar-hide">
+				<div class="relative">
+					<img id="tela-modal-main" src="" alt="" class="w-full aspect-video object-cover rounded-t-2xl" />
+					<button id="tela-modal-close" class="absolute top-3 right-3 bg-white/90 hover:bg-white text-black w-9 h-9 rounded-full flex items-center justify-center font-bold text-xl leading-none shadow">&times;</button>
 				</div>
-				<div>
-					<h4 class="font-bold uppercase tracking-wide mb-3">Navegación</h4>
-					<ul class="space-y-2 text-neutral-600">
-						<li><a href="#productos" class="hover:text-black">Productos</a></li>
-						<li><a href="#personalizar" class="hover:text-black">Personalizar</a></li>
-						<li><a href="#nosotros" class="hover:text-black">Nosotros</a></li>
-					</ul>
-				</div>
-				<div>
-					<h4 class="font-bold uppercase tracking-wide mb-3">Contacto</h4>
-					<ul class="space-y-2 text-neutral-600">
-						<li>hola@crssport.com</li>
-						<li>@crssport</li>
-					</ul>
+				<div class="p-6">
+					<h3 id="tela-modal-title" class="text-2xl sm:text-3xl font-black uppercase mb-2"></h3>
+					<p id="tela-modal-desc" class="text-neutral-600 mb-6"></p>
+					<div id="tela-modal-photos" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
 				</div>
 			</div>
-			<div class="border-t border-black/10 py-4 text-center text-xs text-neutral-500">
-				© 2026 CRS Sport. Todos los derechos reservados.
-			</div>
-		</footer>
+		</div>
+
 	</main>
 	<style>
 		.scrollbar-hide::-webkit-scrollbar { display: none; }
 		.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+		button, a { cursor: pointer; }
+		#tela-modal-desc ul { list-style: disc; padding-left: 1.5rem; margin: 0.5rem 0; }
+		#tela-modal-desc ol { list-style: decimal; padding-left: 1.5rem; margin: 0.5rem 0; }
+		#tela-modal-desc li { display: list-item; margin: 0.25rem 0; }
+		#tela-modal-desc p { margin: 0.5rem 0; }
+		#tela-modal-desc h3 { font-weight: 700; margin-top: 1rem; margin-bottom: 0.5rem; }
 	</style>
 	<script>
 		document.querySelectorAll('[data-prev]').forEach((btn) => {
@@ -331,6 +229,29 @@ const clients = Array.from({ length: 6 }).map((_, i) => ({
 			slider.style.cursor = 'grab';
 		});
 
+		// tela modal
+		const modal = document.getElementById('tela-modal');
+		document.querySelectorAll('[data-modal="tela"]').forEach((btn) => {
+			btn.addEventListener('click', () => {
+				document.getElementById('tela-modal-title').textContent = btn.getAttribute('data-title');
+				document.getElementById('tela-modal-desc').textContent = btn.getAttribute('data-desc');
+				modal.classList.remove('hidden');
+				modal.classList.add('flex');
+			});
+		});
+		document.getElementById('combo-modal-close').addEventListener('click', () => {
+		const m = document.getElementById('combo-modal');
+		m.style.opacity = '0';
+		m.style.pointerEvents = 'none';
+	});
+	window.openImgModal = function(src){ const m=document.getElementById('img-modal'); document.getElementById('img-modal-src').src=src; m.style.opacity='1'; m.style.pointerEvents='auto'; };
+	document.getElementById('img-modal-close').addEventListener('click', () => { const m=document.getElementById('img-modal'); m.style.opacity='0'; m.style.pointerEvents='none'; });
+	document.getElementById('tela-modal-close').addEventListener('click', () => {
+			const m = document.getElementById('tela-modal');
+			m.style.opacity = '0';
+			m.style.pointerEvents = 'none';
+		});
+
 		// add nav buttons to each slider
 		document.querySelectorAll('.snap-x').forEach((slider, idx) => {
 			if (slider.id === 'cat-slider') return;
@@ -348,5 +269,150 @@ const clients = Array.from({ length: 6 }).map((_, i) => ({
 			wrap.appendChild(next);
 			slider.parentNode.insertBefore(wrap, slider);
 		});
+	// load catalog from backend
+	fetch('http://127.0.0.1:8000/api/catalog').then((r) => r.json()).then((data) => {
+		const nav = document.getElementById('cat-nav');
+		const container = document.getElementById('cat-container');
+		data.forEach((cat, idx) => {
+			const a = document.createElement('a');
+			a.href = '#cat-' + cat.id;
+			a.dataset.cat = 'cat-' + cat.id;
+			a.className = 'shrink-0 px-5 py-2 text-sm font-bold uppercase tracking-wide border border-black ' + (idx === 0 ? 'bg-black text-white' : 'text-black hover:bg-black hover:text-white');
+			a.textContent = cat.name;
+			nav.appendChild(a);
+
+			const sec = document.createElement('div');
+			sec.id = 'cat-' + cat.id;
+			sec.className = 'mb-12 scroll-mt-20 cat-section' + (idx === 0 ? '' : ' hidden');
+			sec.innerHTML = '<h3 class="text-xl font-bold uppercase mb-4">' + cat.name + '</h3><div class="flex gap-6 overflow-x-auto pb-4 scrollbar-hide snap-x">' +
+				cat.products.map((p) => '<article class="group shrink-0 w-64"><a href="/producto?id=' + p.id + '"><div class="aspect-square bg-neutral-100 flex items-center justify-center overflow-hidden"><img src="' + (p.image || '/logo_principal.webp') + '" alt="' + p.name + '" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" /></div></a><div class="mt-3"><p class="mt-1 font-bold">$' + Number(p.price).toLocaleString('es-CO', { maximumFractionDigits: 0 }) + '</p><h4 class="font-normal">' + p.name + '</h4><p class="text-xs uppercase text-gray-500">' + cat.name + '</p></div></article>').join('') + '</div>';
+			container.appendChild(sec);
+		});
+		// rebind tabs
+		document.querySelectorAll('#cat-nav a[data-cat]').forEach((a) => {
+			a.addEventListener('click', (e) => {
+				e.preventDefault();
+				document.querySelectorAll('#cat-nav a[data-cat]').forEach((x) => { x.classList.remove('bg-black','text-white'); x.classList.add('text-black'); });
+				a.classList.add('bg-black','text-white'); a.classList.remove('text-black');
+				document.querySelectorAll('.cat-section').forEach((s) => s.classList.add('hidden'));
+				const t = document.getElementById(a.getAttribute('data-cat'));
+				if (t) t.classList.remove('hidden');
+			});
+		});
+		const first = document.querySelector('#cat-nav a[data-cat]');
+		if (first) { first.classList.add('bg-black','text-white'); first.classList.remove('text-black'); }
+		const firstSec = document.querySelector('.cat-section');
+		if (firstSec) firstSec.classList.remove('hidden');
+	}).catch((e) => console.error(e));
+	// telas
+	fetch('http://127.0.0.1:8000/api/telas').then((r) => r.json()).then((data) => {
+		const grid = document.getElementById('telas-grid');
+		grid.innerHTML = '';
+		data.forEach((t) => {
+		const mainPhoto = t.main_photo ? 'http://127.0.0.1:8000' + t.main_photo : '/logo_principal.webp';
+			const card = document.createElement('article');
+			card.className = 'mb-4 group text-center break-inside-avoid';
+			card.innerHTML = '<div class="w-40 h-40 sm:w-48 sm:h-48 mx-auto rounded-full overflow-hidden border-4 border-black/10 group-hover:border-black transition"><img src="' + mainPhoto + '" alt="' + t.name + '" class="w-full h-full object-cover group-hover:scale-110 transition duration-300" /></div>' +
+				'<p class="mt-3 font-bold uppercase text-sm">' + t.name + '</p>' +
+				'<button data-tela="' + t.id + '" class="mt-2 text-xs underline cursor-pointer">Ver detalles</button>';
+			grid.appendChild(card);
+		});
+		document.querySelectorAll('[data-tela]').forEach((btn) => {
+			btn.addEventListener('click', () => {
+				const id = btn.getAttribute('data-tela');
+				fetch('http://127.0.0.1:8000/api/telas/' + id).then((r) => r.json()).then((t) => {
+console.log('tela detail', t);
+					document.getElementById('tela-modal-title').textContent = t.name;
+					document.getElementById('tela-modal-desc').innerHTML = t.description || '';
+					const main = document.getElementById('tela-modal-main');
+					main.src = t.main_photo ? 'http://127.0.0.1:8000' + t.main_photo : '/logo_principal.webp';
+					const photos = document.getElementById('tela-modal-photos');
+					console.log('photos container', photos, 'count', (t.photos||[]).length);
+					photos.innerHTML = '';
+					(t.photos || []).forEach((p) => {
+						const img = document.createElement('img');
+						img.src = p.startsWith('http') ? p : 'http://127.0.0.1:8000' + p;
+						img.className = 'w-full aspect-square object-cover rounded';
+						photos.appendChild(img);
+					});
+					const m = document.getElementById('tela-modal');
+					m.style.opacity = '1';
+					m.style.pointerEvents = 'auto';
+				});
+			});
+		});
+	}).catch((e) => console.error(e));
+	// designs into existing section
+	fetch('http://127.0.0.1:8000/api/designs').then((r) => r.json()).then((data) => {
+		const slider = document.getElementById('cat-slider');
+		slider.innerHTML = '';
+		(data.data ?? data).forEach((d) => {
+			const src = d.image.startsWith('http') ? d.image : 'http://127.0.0.1:8000' + d.image;
+			const div = document.createElement('div');
+			div.className = 'group relative shrink-0 basis-[66%] sm:basis-[28%] aspect-[4/5] bg-black text-white flex items-end p-6 overflow-hidden snap-start';
+			const img = document.createElement('img');
+			img.src = src;
+			img.alt = '';
+			img.className = 'absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500 cursor-pointer';
+			img.addEventListener('click', () => { const m=document.getElementById('img-modal'); document.getElementById('img-modal-src').src=src; m.style.opacity='1'; m.style.pointerEvents='auto'; });
+			div.appendChild(img);
+			slider.appendChild(div);
+		});
+	}).catch((e) => console.error(e));
+	// clients
+	fetch('http://127.0.0.1:8000/api/clients').then((r) => r.json()).then((data) => {
+		const slider = document.getElementById('clients-slider');
+		slider.innerHTML = '';
+		(data.data ?? data).forEach((cl) => {
+			const div = document.createElement('div');
+			div.className = 'shrink-0 w-40 aspect-square overflow-hidden bg-neutral-200 group snap-start';
+			const img = document.createElement('img');
+			const src = cl.image.startsWith('http') ? cl.image : 'http://127.0.0.1:8000' + cl.image;
+			img.src = src;
+			img.alt = cl.name || '';
+			img.className = 'w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500 cursor-pointer';
+			img.addEventListener('click', () => { const m=document.getElementById('img-modal'); document.getElementById('img-modal-src').src=src; m.style.opacity='1'; m.style.pointerEvents='auto'; });
+			div.appendChild(img);
+			slider.appendChild(div);
+		});
+	}).catch((e) => console.error(e));
+	// combos
+	fetch('http://127.0.0.1:8000/api/combos').then((r) => r.json()).then((data) => {
+		const slider = document.getElementById('combos-slider');
+		slider.innerHTML = '';
+		(data.data ?? data).forEach((c) => {
+			const div = document.createElement('div');
+			div.className = 'relative shrink-0 basis-[40%] overflow-hidden snap-start';
+			const img = document.createElement('img');
+			img.src = c.photo ? (c.photo.startsWith('http') ? c.photo : 'http://127.0.0.1:8000' + c.photo) : '/combos/combo_01.jpeg';
+			img.alt = c.name;
+			img.className = 'w-full h-full aspect-[4/5] object-cover';
+			const p = document.createElement('p');
+			p.className = 'absolute bottom-0 inset-x-0 p-4 text-center font-bold uppercase bg-white/60 backdrop-blur';
+			p.textContent = c.name;
+			img.style.cursor = 'pointer';
+			img.addEventListener('click', () => {
+				const m = document.getElementById('combo-modal');
+				document.getElementById('combo-modal-img').src = img.src;
+				m.style.opacity = '1';
+				m.style.pointerEvents = 'auto';
+			});
+			div.appendChild(img);
+			div.appendChild(p);
+			slider.appendChild(div);
+		});
+	}).catch((e) => console.error(e));
+	document.getElementById('combo-modal-close').addEventListener('click', () => {
+		const m = document.getElementById('combo-modal');
+		m.style.opacity = '0';
+		m.style.pointerEvents = 'none';
+	});
+	window.openImgModal = function(src){ const m=document.getElementById('img-modal'); document.getElementById('img-modal-src').src=src; m.style.opacity='1'; m.style.pointerEvents='auto'; };
+	document.getElementById('img-modal-close').addEventListener('click', () => { const m=document.getElementById('img-modal'); m.style.opacity='0'; m.style.pointerEvents='none'; });
+	document.getElementById('tela-modal-close').addEventListener('click', () => {
+		const m = document.getElementById('tela-modal');
+		m.style.opacity = '0';
+		m.style.pointerEvents = 'none';
+	});
 	</script>
 </Layout>

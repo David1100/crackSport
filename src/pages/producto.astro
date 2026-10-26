@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/global.css';
+---
+<Layout title="Producto | CRS Sport">
+	<main class="max-w-5xl mx-auto px-4 py-10">
+		<a href="/" class="text-sm underline">&larr; Volver</a>
+		<div id="product" class="mt-6 grid md:grid-cols-2 gap-8"></div>
+	</main>
+	<script>
+		document.body.classList.add('loaded');
+		const params = new URLSearchParams(window.location.search);
+		const id = params.get('id');
+		fetch('http://127.0.0.1:8000/api/products/' + id).then((r) => r.json()).then((p) => {
+			const container = document.getElementById('product');
+			const img = p.image ? (p.image.startsWith('http') ? p.image : 'http://127.0.0.1:8000' + p.image) : '/logo_principal.webp';
+			const price = Number(p.price).toLocaleString('es-CO', { maximumFractionDigits: 0 });
+			const allImages = [img].concat((p.images || []).map((im) => im.startsWith('http') ? im : 'http://127.0.0.1:8000' + im));
+			const gallery = allImages.map((src) => {
+				return '<img src="' + src + '" class="w-full aspect-square object-cover rounded cursor-pointer" onclick="document.getElementById(\'main-img\').src=\'' + src + '\'" />';
+			}).join('');
+			container.innerHTML = `
+				<div>
+					<div class="aspect-square bg-neutral-100 overflow-hidden rounded">
+						<img id="main-img" src="${img}" alt="${p.name}" class="w-full h-full object-cover" />
+					</div>
+					${gallery ? '<div class="grid grid-cols-3 gap-2 mt-4">' + gallery + '</div>' : ''}
+				</div>
+				<div>
+					<p class="text-xs uppercase text-gray-500">${p.category?.name || ''}</p>
+					<h1 class="text-3xl font-black uppercase mt-2">${p.name}</h1>
+					<p class="text-2xl font-bold mt-4">$${price}</p>
+					<p class="text-neutral-600 mt-4">${p.description || ''}</p>
+					<a id="cotizar" href="#" class="mt-8 inline-flex items-center justify-center px-8 py-4 bg-black text-white font-bold uppercase tracking-wide hover:bg-neutral-800 transition">Cotizar</a>
+				</div>
+			`;
+			const url = window.location.href;
+			document.getElementById('cotizar').href = 'https://wa.me/573017994199?text=' + encodeURIComponent('Hola, vengo desde la web y quiero cotizar este producto: ' + url);
+		}).catch((e) => { document.getElementById('product').textContent = 'Producto no encontrado'; console.error(e); });
+	</script>
+</Layout>
