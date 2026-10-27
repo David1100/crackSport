@@ -18,3 +18,6 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 const form = useForm({});
 const submit = () => form.post('/email/verification-notification');
 </script>
+
+
+

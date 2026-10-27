@@ -9,8 +9,8 @@
                 <div v-if="loading" class="flex justify-center py-10">
                     <div class="animate-spin h-8 w-8 border-4 border-black border-t-transparent rounded-full"></div>
                 </div>
-                <div v-else class="bg-white shadow-sm sm:rounded-lg overflow-hidden">
-                    <table class="min-w-full divide-y divide-gray-200">
+                <div v-else class="bg-white shadow-sm sm:rounded-lg overflow-hidden overflow-x-auto w-full">
+                    <table class="min-w-[640px] md:min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nombre</th>
@@ -97,3 +97,8 @@ const remove = async (id) => {
     await load();
 };
 </script>
+
+
+
+
+

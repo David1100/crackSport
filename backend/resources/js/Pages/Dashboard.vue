@@ -23,8 +23,8 @@
                 <div v-if="loading" class="flex justify-center py-10">
                     <div class="animate-spin h-8 w-8 border-4 border-black border-t-transparent rounded-full"></div>
                 </div>
-                <div v-else class="bg-white shadow-sm sm:rounded-lg overflow-hidden">
-                    <table class="min-w-full divide-y divide-gray-200">
+                <div v-else class="bg-white shadow-sm sm:rounded-lg overflow-hidden overflow-x-auto w-full">
+                    <table class="min-w-[640px] md:min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th>
@@ -85,8 +85,8 @@
                         <div class="bg-gray-50 rounded-lg p-3 flex items-center gap-2"><input type="checkbox" :checked="detail?.delivered" @change="toggleDetailDelivered" class="w-4 h-4 accent-black" /><p class="text-xs text-gray-500 uppercase">Entregado</p></div>
                     </div>
                 </div>
-                <div class="overflow-x-auto rounded-lg border border-gray-200">
-                    <table class="min-w-full text-sm">
+                <div class="overflow-x-auto w-full rounded-lg border border-gray-200">
+                    <table class="min-w-[640px] md:min-w-full text-sm">
                         <thead class="bg-gray-50"><tr><th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nombre</th><th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Dorsal</th><th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Talla camisa</th><th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Talla pantaloneta</th><th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Tipo</th></tr></thead>
                         <tbody class="divide-y divide-gray-100"><tr v-for="(pl,i) in (detail?.players||[])" :key="i"><td class="px-3 py-2 font-medium">{{ pl.name }}</td><td class="px-3 py-2">{{ pl.number }}</td><td class="px-3 py-2">{{ pl.size }}</td><td class="px-3 py-2">{{ pl.short_size }}</td><td class="px-3 py-2">{{ pl.type }}</td></tr></tbody>
                     </table>
@@ -129,3 +129,6 @@ const formatPrice = (v) => {
     return '$' + Math.round(n).toLocaleString('es-CO');
 };
 </script>
+
+
+

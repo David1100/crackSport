@@ -40,3 +40,6 @@ const props = defineProps({ user: Object });
 const form = useForm({ name: props.user.name, email: props.user.email, password: '', password_confirmation: '' });
 const submit = () => form.put(route('users.update', props.user.id));
 </script>
+
+
+

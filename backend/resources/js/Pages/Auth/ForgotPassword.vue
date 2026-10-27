@@ -19,3 +19,6 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 const form = useForm({ email: '' });
 const submit = () => form.post('/forgot-password');
 </script>
+
+
+

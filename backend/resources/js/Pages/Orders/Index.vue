@@ -21,8 +21,8 @@
                 <div v-if="loading" class="flex justify-center py-10">
                     <div class="animate-spin h-8 w-8 border-4 border-black border-t-transparent rounded-full"></div>
                 </div>
-                <div v-else class="bg-white shadow-sm sm:rounded-lg overflow-hidden">
-                    <table class="min-w-full divide-y divide-gray-200">
+                <div v-else class="bg-white shadow-sm sm:rounded-lg overflow-hidden overflow-x-auto w-full">
+                    <table class="min-w-[640px] md:min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th>
@@ -258,8 +258,8 @@
                     </div>
                     <div>
                         <p class="text-sm font-medium text-gray-700 mb-2">Jugadores ({{ (detail?.players || []).length }})</p>
-                        <div class="overflow-x-auto rounded-lg border border-gray-200">
-                            <table class="min-w-full text-sm">
+                        <div class="overflow-x-auto w-full rounded-lg border border-gray-200">
+                            <table class="min-w-[640px] md:min-w-full text-sm">
                                 <thead class="bg-gray-50">
                                     <tr>
                                         <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nombre</th>
@@ -505,3 +505,7 @@ const formatPrice = (v) => {
     return '$' + Math.round(n).toLocaleString('es-CO');
 };
 </script>
+
+
+
+

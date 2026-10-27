@@ -27,3 +27,6 @@ import { useForm } from '@inertiajs/vue3';
 const form = useForm({ name: '', image: '' });
 const submit = () => form.post(route('categories.store'));
 </script>
+
+
+

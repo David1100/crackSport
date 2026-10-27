@@ -270,7 +270,7 @@ const clients = Array.from({ length: 6 }).map((_, i) => ({
 			slider.parentNode.insertBefore(wrap, slider);
 		});
 	// load catalog from backend
-	fetch('https://backend.miplatillo.com/catalog').then((r) => r.json()).then((data) => {
+	fetch('https://backend.miplatillo.com/api/catalog').then((r) => r.json()).then((data) => {
 		const nav = document.getElementById('cat-nav');
 		const container = document.getElementById('cat-container');
 		data.forEach((cat, idx) => {
@@ -305,7 +305,7 @@ const clients = Array.from({ length: 6 }).map((_, i) => ({
 		if (firstSec) firstSec.classList.remove('hidden');
 	}).catch((e) => console.error(e));
 	// telas
-	fetch('https://backend.miplatillo.com/telas').then((r) => r.json()).then((data) => {
+	fetch('https://backend.miplatillo.com/api/telas').then((r) => r.json()).then((data) => {
 		const grid = document.getElementById('telas-grid');
 		grid.innerHTML = '';
 		data.forEach((t) => {
@@ -320,7 +320,7 @@ const clients = Array.from({ length: 6 }).map((_, i) => ({
 		document.querySelectorAll('[data-tela]').forEach((btn) => {
 			btn.addEventListener('click', () => {
 				const id = btn.getAttribute('data-tela');
-				fetch('https://backend.miplatillo.com/telas/' + id).then((r) => r.json()).then((t) => {
+				fetch('https://backend.miplatillo.com/api/telas/' + id).then((r) => r.json()).then((t) => {
 console.log('tela detail', t);
 					document.getElementById('tela-modal-title').textContent = t.name;
 					document.getElementById('tela-modal-desc').innerHTML = t.description || '';
@@ -343,7 +343,7 @@ console.log('tela detail', t);
 		});
 	}).catch((e) => console.error(e));
 	// designs into existing section
-	fetch('https://backend.miplatillo.com/designs').then((r) => r.json()).then((data) => {
+	fetch('https://backend.miplatillo.com/api/designs').then((r) => r.json()).then((data) => {
 		const slider = document.getElementById('cat-slider');
 		slider.innerHTML = '';
 		(data.data ?? data).forEach((d) => {
@@ -360,7 +360,7 @@ console.log('tela detail', t);
 		});
 	}).catch((e) => console.error(e));
 	// clients
-	fetch('https://backend.miplatillo.com/clients').then((r) => r.json()).then((data) => {
+	fetch('https://backend.miplatillo.com/api/clients').then((r) => r.json()).then((data) => {
 		const slider = document.getElementById('clients-slider');
 		slider.innerHTML = '';
 		(data.data ?? data).forEach((cl) => {
@@ -377,7 +377,7 @@ console.log('tela detail', t);
 		});
 	}).catch((e) => console.error(e));
 	// combos
-	fetch('https://backend.miplatillo.com/combos').then((r) => r.json()).then((data) => {
+	fetch('https://backend.miplatillo.com/api/combos').then((r) => r.json()).then((data) => {
 		const slider = document.getElementById('combos-slider');
 		slider.innerHTML = '';
 		(data.data ?? data).forEach((c) => {

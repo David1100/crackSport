@@ -20,3 +20,6 @@ import { useForm } from '@inertiajs/vue3';
 const form = useForm({ name: '', main_photo: '' });
 const submit = () => form.post(route('telas.store'));
 </script>
+
+
+

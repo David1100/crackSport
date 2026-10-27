@@ -82,3 +82,5 @@ watch(() => page.url, (url) => {
     if (configPaths.some(p => url.startsWith(p))) configOpen.value = true;
 }, { immediate: true });
 </script>
+
+

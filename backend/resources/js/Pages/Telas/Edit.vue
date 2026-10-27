@@ -21,3 +21,6 @@ const props = defineProps({ tela: Object });
 const form = useForm({ name: props.tela.name, main_photo: props.tela.main_photo });
 const submit = () => form.put(route('telas.update', props.tela.id));
 </script>
+
+
+

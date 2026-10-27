@@ -26,3 +26,6 @@ const props = defineProps({ categories: Array });
 const form = useForm({ name: '', category_id: null, price: '', discount_price: '', image: '' });
 const submit = () => form.post(route('products.store'));
 </script>
+
+
+

@@ -39,3 +39,6 @@ import { useForm } from '@inertiajs/vue3';
 const form = useForm({ name: '', email: '', password: '', password_confirmation: '' });
 const submit = () => form.post(route('users.store'));
 </script>
+
+
+

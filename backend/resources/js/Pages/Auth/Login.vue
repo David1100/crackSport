@@ -30,3 +30,6 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 const form = useForm({ email: '', password: '', remember: false });
 const submit = () => form.post('/login');
 </script>
+
+
+

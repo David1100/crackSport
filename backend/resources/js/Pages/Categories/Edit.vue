@@ -28,3 +28,6 @@ const props = defineProps({ category: Object });
 const form = useForm({ name: props.category.name, image: props.category.image });
 const submit = () => form.put(route('categories.update', props.category.id));
 </script>
+
+
+

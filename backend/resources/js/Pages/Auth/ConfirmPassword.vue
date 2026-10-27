@@ -19,3 +19,6 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 const form = useForm({ password: '' });
 const submit = () => form.post('/confirm-password');
 </script>
+
+
+

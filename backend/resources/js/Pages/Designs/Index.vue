@@ -47,3 +47,8 @@ const remove = async (id) => {
     await load();
 };
 </script>
+
+
+
+
+

@@ -26,3 +26,6 @@ const props = defineProps({ product: Object, categories: Array });
 const form = useForm({ name: props.product.name, category_id: props.product.category_id, price: props.product.price, discount_price: props.product.discount_price, image: props.product.image });
 const submit = () => form.put(route('products.update', props.product.id));
 </script>
+
+
+

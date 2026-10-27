@@ -36,3 +36,5 @@ const setFile = (f) => {
 const onSelect = (e) => { const f = e.target.files?.[0]; if (f) setFile(f); };
 const onDrop = (e) => { dragging.value = false; const f = e.dataTransfer?.files?.[0]; if (f && f.type.startsWith('image/')) setFile(f); };
 </script>
+
+
