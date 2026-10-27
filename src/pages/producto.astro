@@ -11,7 +11,7 @@ import '../styles/global.css';
 		document.body.classList.add('loaded');
 		const params = new URLSearchParams(window.location.search);
 		const id = params.get('id');
-		fetch('http://127.0.0.1:8000/api/products/' + id).then((r) => r.json()).then((p) => {
+		fetch('https://backend.miplatillo.com/products/' + id).then((r) => r.json()).then((p) => {
 			const container = document.getElementById('product');
 			const img = p.image ? (p.image.startsWith('http') ? p.image : 'http://127.0.0.1:8000' + p.image) : '/logo_principal.webp';
 			const price = Number(p.price).toLocaleString('es-CO', { maximumFractionDigits: 0 });
