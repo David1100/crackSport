@@ -15,10 +15,10 @@
                 <input v-model="form.password" type="password" class="mt-1 w-full border rounded px-3 py-2" required />
                 <div v-if="form.errors.password" class="text-red-600 text-sm">{{ form.errors.password }}</div>
             </div>
-            <button type="submit" class="w-full bg-black text-white py-2 rounded" :disabled="form.processing">Log in</button>
+            <button type="submit" class="w-full bg-black text-white py-2 rounded" :disabled="form.processing">Iniciar sesión</button>
         </form>
         <p class="mt-4 text-sm">
-            <Link href="/forgot-password">Forgot your password?</Link>
+            <Link href="/forgot-password">¿Olvidaste tu contraseña?</Link>
         </p>
     </GuestLayout>
 </template>
@@ -30,6 +30,7 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 const form = useForm({ email: '', password: '', remember: false });
 const submit = () => form.post('/login');
 </script>
+
 
 
 

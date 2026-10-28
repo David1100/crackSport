@@ -1,28 +1,55 @@
 <template>
     <AuthenticatedLayout title="Pedidos">
         <div class="py-6">
-            <div class="max-w-7xl mx-auto">
-                <div class="flex items-center justify-between mb-4">
+            <div class="max-w-7xl mx-auto w-full overflow-x-hidden">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
                     <h2 class="text-xl font-bold">Pedidos</h2>
-                    <div class="flex items-center gap-2">
-                        <select v-model="filterStatus" class="border rounded px-2 py-1 text-sm">
-                            <option value="">Todos los estados</option>
-                            <option value="pagado">Pagado</option>
-                            <option value="pendiente">Pendiente</option>
-                        </select>
-                        <select v-model="filterDelivered" class="border rounded px-2 py-1 text-sm">
-                            <option value="">Entrega (todos)</option>
-                            <option value="si">Entregados</option>
-                            <option value="no">No entregados</option>
-                        </select>
-                        <button @click="openCreate" class="px-4 py-2 bg-black text-white rounded-md text-sm font-medium hover:bg-gray-800">Nuevo</button>
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <select v-model="filterStatus" class="min-w-0 flex-1 sm:flex-none border rounded px-2 py-1.5.5 pr-8 text-sm">
+                                <option value="">Todos los estados</option>
+                                <option value="pagado">Pagado</option>
+                                <option value="pendiente">Pendiente</option>
+                            </select>
+                            <select v-model="filterDelivered" class="min-w-0 flex-1 sm:flex-none border rounded px-2 py-1.5.5 pr-8 text-sm">
+                                <option value="">Entrega (todos)</option>
+                                <option value="si">Entregados</option>
+                                <option value="no">No entregados</option>
+                            </select>
+                        </div>
+                        <button @click="openCreate" class="w-full sm:w-auto px-4 py-2 bg-black text-white rounded-md text-sm font-medium hover:bg-gray-800">Nuevo</button>
                     </div>
                 </div>
                 <div v-if="loading" class="flex justify-center py-10">
                     <div class="animate-spin h-8 w-8 border-4 border-black border-t-transparent rounded-full"></div>
                 </div>
-                <div v-else class="bg-white shadow-sm sm:rounded-lg overflow-hidden overflow-x-auto w-full">
-                    <table class="min-w-[640px] md:min-w-full divide-y divide-gray-200">
+                <div v-else class="bg-white shadow-sm sm:rounded-lg">
+                    <div class="space-y-3 md:hidden">
+                        <div v-for="o in filteredOrders" :key="o.id" class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="min-w-0 flex-1">
+                                    <h3 class="break-words text-sm font-semibold text-gray-900">{{ o.client_name }}</h3>
+                                    <p class="mt-1 break-words text-sm text-gray-500">{{ o.client_phone }}</p>
+                                </div>
+                                <span class="shrink-0 rounded-full px-2 py-1.5 text-xs font-medium" :class="o.status === 'pagado' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'">{{ o.status }}</span>
+                            </div>
+                            <div class="mt-4 grid grid-cols-2 gap-x-4 gap-y-3">
+                                <div><p class="text-xs text-gray-500">Jugadores</p><p class="mt-1 text-sm font-medium">{{ (o.players||[]).length }}</p></div>
+                                <div><p class="text-xs text-gray-500">Total</p><p class="mt-1 text-sm font-semibold">{{ formatPrice(o.total) }}</p></div>
+                                <div><p class="text-xs text-gray-500">Abono</p><p class="mt-1 text-sm font-medium">{{ formatPrice(o.advance_payment) }}</p></div>
+                                <div class="flex items-center gap-2"><input type="checkbox" :checked="o.delivered" @change="toggleDelivered(o)" class="w-4 h-4 accent-black" /><p class="text-xs text-gray-500">Entregado</p></div>
+                            </div>
+                            <div class="mt-4 flex gap-2 border-t border-gray-100 pt-3">
+                                <button @click="view(o)" class="flex-1 rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700">Ver</button>
+                                <button @click="edit(o)" class="flex-1 rounded-lg bg-amber-50 px-3 py-2 text-sm font-medium text-amber-700">Editar</button>
+                                <button @click="abonar(o)" class="flex-1 rounded-lg bg-green-50 px-3 py-2 text-sm font-medium text-green-700">Abonar</button>
+                                <button @click="remove(o.id)" class="flex-1 rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-700">Eliminar</button>
+                            </div>
+                        </div>
+                        <div v-if="!filteredOrders.length" class="py-8 text-center text-sm italic text-gray-400">Sin pedidos</div>
+                    </div>
+                    <div class="hidden overflow-x-auto md:block">
+                    <table class="min-w-[900px] md:min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th>
@@ -43,7 +70,7 @@
                                 <td class="px-6 py-4">{{ formatPrice(o.total) }}</td>
                                 <td class="px-6 py-4">{{ formatPrice(o.advance_payment) }}</td>
                                 <td class="px-6 py-4">
-                                <span class="px-2 py-1 text-xs font-medium rounded-full" :class="o.status === 'pagado' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'">{{ o.status }}</span>
+                                <span class="px-2 py-1.5 text-xs font-medium rounded-full" :class="o.status === 'pagado' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'">{{ o.status }}</span>
                             </td>
                             <td class="px-6 py-4">
                                 <input type="checkbox" :checked="o.delivered" @change="toggleDelivered(o)" class="w-4 h-4 accent-black" />
@@ -68,13 +95,28 @@
                 </div>
             </div>
         </div>
-        <Modal :show="showModal" @close="showModal = false">
+        </div>
+        <Modal :show="showModal" max-width="4xl" @close="showModal = false">
             <div class="p-0">
                 <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                     <h3 class="text-lg font-semibold text-gray-900">{{ editingId ? 'Editar Pedido' : 'Nuevo Pedido' }}</h3>
                     <button @click="showModal = false" class="text-gray-400 hover:text-gray-700 text-2xl leading-none">&times;</button>
                 </div>
-                <form @submit.prevent="submit" class="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
+                <form @submit.prevent="submit" class="p-4 sm:p-6 space-y-5 h-full max-h-full overflow-y-auto">
+                    <div>
+                        <InputLabel value="Diseños (imágenes)" />
+                        <label class="mt-1 flex items-center justify-center w-full h-24 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-black hover:bg-gray-50 transition">
+                            <span class="text-sm text-gray-500">Click para seleccionar imágenes</span>
+                            <input type="file" multiple accept="image/*" @change="onImages" class="hidden" />
+                        </label>
+                        <p v-if="images.length" class="mt-1 text-xs text-gray-500">{{ images.length }} archivo(s) seleccionado(s)</p>
+                        <div v-if="existingImages.length" class="mt-2 grid grid-cols-4 gap-2">
+                            <div v-for="(im,i) in existingImages" :key="i" class="relative">
+                                <img :src="im" class="w-full aspect-square object-cover rounded-lg border border-gray-200" />
+                                <button type="button" @click="existingImages.splice(i,1)" class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">&times;</button>
+                            </div>
+                        </div>
+                    </div>
                     <div>
                         <InputLabel value="Tipo de pedido" />
                         <div class="mt-1 flex gap-3">
@@ -96,7 +138,15 @@
                         </div>
                         <div>
                             <InputLabel value="Talla" />
-                            <TextInput v-model="form.size" type="text" class="mt-1 block w-full rounded-lg border-gray-300 focus:border-black focus:ring-black uppercase" />
+                            <select v-model="form.size" class="mt-1 block w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+                                <option value="" disabled>Seleccionar</option>
+                                        <optgroup label="Niño">
+                                    <option v-for="t in ['2','4','6','8','10','12','14']" :key="'n'+t" :value="t">{{ t }}</option>
+                                </optgroup>
+                                <optgroup label="Adulto">
+                                    <option v-for="t in ['16','S','M','L','XL','XXL','XXXL']" :key="'a'+t" :value="t">{{ t }}</option>
+                                </optgroup>
+                            </select>
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -137,38 +187,46 @@
                             <TextInput v-model="form.collar_type" type="text" class="mt-1 block w-full rounded-lg border-gray-300 focus:border-black focus:ring-black" />
                         </div>
                     </div>
-                    <div>
-                        <InputLabel value="Diseños (imágenes)" />
-                        <label class="mt-1 flex items-center justify-center w-full h-24 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-black hover:bg-gray-50 transition">
-                            <span class="text-sm text-gray-500">Click para seleccionar imágenes</span>
-                            <input type="file" multiple accept="image/*" @change="onImages" class="hidden" />
-                        </label>
-                        <p v-if="images.length" class="mt-1 text-xs text-gray-500">{{ images.length }} archivo(s) seleccionado(s)</p>
-                        <div v-if="existingImages.length" class="mt-2 grid grid-cols-4 gap-2">
-                            <div v-for="(im,i) in existingImages" :key="i" class="relative">
-                                <img :src="im" class="w-full aspect-square object-cover rounded-lg border border-gray-200" />
-                                <button type="button" @click="existingImages.splice(i,1)" class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">&times;</button>
-                            </div>
-                        </div>
-                    </div>
                     <div v-if="form.order_type === 'team'">
                         <div class="flex items-center justify-between mb-2">
                             <InputLabel value="Jugadores" />
                             <button type="button" @click="addPlayer" class="text-sm font-medium text-black hover:underline">+ Agregar</button>
                         </div>
-                        <div v-for="(pl, idx) in players" :key="idx" class="grid grid-cols-12 gap-2 mb-2 p-3 bg-gray-50 rounded-lg">
-                            <TextInput v-model="pl.name" placeholder="Nombre" class="col-span-2 rounded-lg border-gray-300 uppercase" />
-                            <TextInput v-model="pl.number" placeholder="Dorsal" class="col-span-1 rounded-lg border-gray-300" />
-                            <TextInput v-model="pl.size" placeholder="Talla camisa" class="col-span-1 rounded-lg border-gray-300 uppercase" />
-                            <TextInput v-model="pl.short_size" placeholder="Talla pantaloneta" class="col-span-1 rounded-lg border-gray-300 uppercase" />
-                            <select v-model="pl.type" class="col-span-2 rounded-lg border-gray-300 text-sm">
-                                <option value="jugador">Jugador</option>
-                                <option value="arquero">Arquero</option>
-                            </select>
-                            <TextInput v-model="pl.details" placeholder="Detalles" class="col-span-4 rounded-lg border-gray-300" />
-                            <button type="button" @click="players.splice(idx,1)" class="col-span-1 text-red-500 hover:text-red-700 flex items-center justify-center" title="Eliminar">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                            </button>
+                        <div v-for="(pl, idx) in players" :key="idx" class="mb-2 p-3 bg-gray-50 rounded-lg space-y-2">
+                            <div class="flex flex-wrap gap-2 items-center">
+                                <div class="flex flex-1 flex-wrap gap-2 items-center">
+                                    <TextInput v-model="pl.name" placeholder="Nombre" class="flex-1 min-w-[120px] rounded-lg border-gray-300 uppercase" />
+                                    <TextInput v-model="pl.number" placeholder="Dorsal" class="w-20 rounded-lg border-gray-300" />
+                                    <select v-model="pl.size" class="w-28 rounded-lg border-gray-300 text-sm">
+                                        <option value="" disabled>Seleccionar</option>
+                                        <optgroup label="Niño">
+                                            <option v-for="t in ['2','4','6','8','10','12','14']" :key="'n'+t" :value="t">{{ t }}</option>
+                                        </optgroup>
+                                        <optgroup label="Adulto">
+                                            <option v-for="t in ['16','S','M','L','XL','XXL','XXXL']" :key="'a'+t" :value="t">{{ t }}</option>
+                                        </optgroup>
+                                    </select>
+                                    <select v-model="pl.short_size" class="w-32 rounded-lg border-gray-300 text-sm">
+                                        <option value="" disabled>Seleccionar</option>
+                                        <optgroup label="Niño">
+                                            <option v-for="t in ['2','4','6','8','10','12','14']" :key="'n'+t" :value="t">{{ t }}</option>
+                                        </optgroup>
+                                        <optgroup label="Adulto">
+                                            <option v-for="t in ['16','S','M','L','XL','XXL','XXXL']" :key="'a'+t" :value="t">{{ t }}</option>
+                                        </optgroup>
+                                    </select>
+                                    <select v-model="pl.type" class="rounded-lg border-gray-300 text-sm">
+                                        <option value="jugador">Jugador</option>
+                                        <option value="arquero">Arquero</option>
+                                    </select>
+                                    <TextInput v-model="pl.details" placeholder="Detalles" class="flex-1 min-w-[200px] rounded-lg border-gray-300" />
+                                </div>
+                                <div class="flex items-center justify-center self-center">
+                                    <button type="button" @click="players.splice(idx,1)" class="text-red-500 hover:text-red-700 flex items-center justify-center" title="Eliminar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <p v-if="!players.length" class="text-xs text-gray-400 italic">Sin jugadores agregados.</p>
                     </div>
@@ -202,17 +260,17 @@
                         <p class="text-sm text-gray-500">{{ detail?.client_phone }}</p>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button @click="exportPdf" class="px-3 py-1.5 text-sm bg-black text-white rounded-md hover:bg-gray-800">Exportar PDF</button>
+                        <button @click="exportPdf" class="px-3 py-1.5.5 text-sm bg-black text-white rounded-md hover:bg-gray-800">Exportar PDF</button>
                         <button @click="showDetail = false" class="text-gray-400 hover:text-gray-700 text-2xl leading-none">&times;</button>
                     </div>
                 </div>
-                <div class="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
+                <div class="p-6 space-y-5 h-full max-h-full overflow-y-auto">
                     <div v-if="detail?.order_type === 'individual'" class="bg-indigo-50 border border-indigo-100 rounded-lg p-3 text-sm">
                         <p><strong>Producto:</strong> {{ detail?.product_name }}</p>
                         <p><strong>Cantidad:</strong> {{ detail?.quantity }} &nbsp; <strong>Talla:</strong> {{ detail?.size }}</p>
                     </div>
-                    <div class="flex gap-4">
-                        <div v-if="detail?.images?.length" class="w-1/2 flex-shrink-0">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div v-if="detail?.images?.length" class="w-full md:w-1/2 flex-shrink-0">
                             <p class="text-sm font-medium text-gray-700 mb-2">Diseños</p>
                             <div class="relative">
                                 <img :src="(detail.images[detailImageIndex] || '').startsWith('http') ? detail.images[detailImageIndex] : detail.images[detailImageIndex]" class="w-full aspect-square object-cover rounded-lg border border-gray-200" />
@@ -259,7 +317,7 @@
                     <div>
                         <p class="text-sm font-medium text-gray-700 mb-2">Jugadores ({{ (detail?.players || []).length }})</p>
                         <div class="overflow-x-auto w-full rounded-lg border border-gray-200">
-                            <table class="min-w-[640px] md:min-w-full text-sm">
+                            <table class="min-w-[900px] md:min-w-full text-sm">
                                 <thead class="bg-gray-50">
                                     <tr>
                                         <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nombre</th>
@@ -505,6 +563,7 @@ const formatPrice = (v) => {
     return '$' + Math.round(n).toLocaleString('es-CO');
 };
 </script>
+
 
 
 

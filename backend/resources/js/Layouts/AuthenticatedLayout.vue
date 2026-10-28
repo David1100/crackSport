@@ -54,7 +54,7 @@
         <div class="flex-1 flex flex-col">
             <header class="bg-white shadow-sm">
                 <div class="px-6 py-4 flex justify-between items-center">
-                    <h1 class="text-lg font-bold">{{ title }}</h1>
+                    <Link href="/dashboard" class="text-lg font-bold hover:underline">{{ title }}</Link>
                     <button type="button" @click="logout" class="text-sm text-gray-600 hover:text-black">Cerrar sesion</button>
                 </div>
             </header>
@@ -70,7 +70,7 @@ import { Link, usePage, router } from '@inertiajs/vue3';
 import { computed, ref, watch } from 'vue';
 
 const page = usePage();
-const title = computed(() => page.props.title || 'Panel');
+const title = computed(() => page.props.title || 'Inicio');
 const csrf = document.querySelector('meta[name="csrf-token"]')?.content;
 const logout = () => router.post('/logout');
 const isActive = (path) => page.url.startsWith(path);
@@ -82,5 +82,6 @@ watch(() => page.url, (url) => {
     if (configPaths.some(p => url.startsWith(p))) configOpen.value = true;
 }, { immediate: true });
 </script>
+
 
 

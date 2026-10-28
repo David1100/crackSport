@@ -1,7 +1,7 @@
 <template>
     <AuthenticatedLayout title="Dashboard">
         <div class="py-6">
-            <div class="max-w-7xl mx-auto">
+            <div class="max-w-7xl mx-auto w-full overflow-x-hidden">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
                     <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-6 text-white shadow-lg">
                         <div class="absolute -right-6 -top-6 w-24 h-24 bg-white/10 rounded-full"></div>
@@ -23,41 +23,203 @@
                 <div v-if="loading" class="flex justify-center py-10">
                     <div class="animate-spin h-8 w-8 border-4 border-black border-t-transparent rounded-full"></div>
                 </div>
-                <div v-else class="bg-white shadow-sm sm:rounded-lg overflow-hidden overflow-x-auto w-full">
-                    <table class="min-w-[640px] md:min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Teléfono</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jugadores</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Abono</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="o in orders" :key="o.id">
-                                <td class="px-6 py-4">{{ o.client_name }}</td>
-                                <td class="px-6 py-4">{{ o.client_phone }}</td>
-                                <td class="px-6 py-4">{{ (o.players || []).length }}</td>
-                                <td class="px-6 py-4">{{ formatPrice(o.total) }}</td>
-                                <td class="px-6 py-4">{{ formatPrice(o.advance_payment) }}</td>
-                                <td class="px-6 py-4">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full" :class="o.status === 'pagado' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'">{{ o.status }}</span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <button @click="view(o)" class="text-blue-600 hover:text-blue-800" title="Ver">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr v-if="!orders.length">
-                                <td colspan="7" class="px-6 py-4 text-center text-gray-400 italic">Sin pedidos</td>
-                            </tr>
-                        </tbody>
-                    </table>
+              
+<div v-else class="bg-white shadow-sm sm:rounded-lg">
+
+    <!-- VISTA MÓVIL -->
+    <div class="space-y-3 md:hidden">
+        <div
+            v-for="o in orders"
+            :key="o.id"
+            class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm"
+        >
+            <!-- Cliente y estado -->
+            <div class="flex items-start justify-between gap-3">
+                <div class="min-w-0 flex-1">
+                    <h3 class="break-words text-sm font-semibold text-gray-900">
+                        {{ o.client_name }}
+                    </h3>
+                    <p class="mt-1 break-words text-sm text-gray-500">
+                        {{ o.client_phone }}
+                    </p>
                 </div>
+
+                <span
+                    class="shrink-0 rounded-full px-2 py-1.5 text-xs font-medium"
+                    :class="o.status === 'pagado'
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-amber-100 text-amber-700'"
+                >
+                    {{ o.status }}
+                </span>
+            </div>
+
+            <!-- Información del pedido -->
+            <div class="mt-4 grid grid-cols-2 gap-x-4 gap-y-3">
+                <div>
+                    <p class="text-xs text-gray-500">Jugadores</p>
+                    <p class="mt-1 text-sm font-medium text-gray-900">
+                        {{ (o.players || []).length }}
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-xs text-gray-500">Total</p>
+                    <p class="mt-1 break-words text-sm font-semibold text-gray-900">
+                        {{ formatPrice(o.total) }}
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-xs text-gray-500">Abono</p>
+                    <p class="mt-1 break-words text-sm font-medium text-gray-900">
+                        {{ formatPrice(o.advance_payment) }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Acción -->
+            <div class="mt-4 border-t border-gray-100 pt-3">
+                <button
+                    @click="view(o)"
+                    type="button"
+                    class="flex min-h-[42px] w-full items-center justify-center gap-2
+                           rounded-lg bg-blue-50 px-4 py-2 text-sm font-medium
+                           text-blue-700 transition hover:bg-blue-100
+                           focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5
+                               12 5c4.478 0 8.268 2.943
+                               9.542 7-1.274 4.057-5.064
+                               7-9.542 7-4.477 0-8.268-2.943
+                               -9.542-7z"
+                        />
+                    </svg>
+                    Ver pedido
+                </button>
+            </div>
+        </div>
+
+        <!-- Sin pedidos en móvil -->
+        <div
+            v-if="!orders.length"
+            class="py-8 text-center text-sm italic text-gray-400"
+        >
+            Sin pedidos
+        </div>
+    </div>
+
+    <!-- VISTA ESCRITORIO: se conserva tu tabla -->
+    <div class="hidden overflow-x-auto md:block">
+        <table class="min-w-[900px] w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">
+                        Cliente
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">
+                        Teléfono
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">
+                        Jugadores
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">
+                        Total
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">
+                        Abono
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">
+                        Estado
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">
+                        Acciones
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y divide-gray-200 bg-white">
+                <tr v-for="o in orders" :key="o.id">
+                    <td class="px-6 py-4">{{ o.client_name }}</td>
+                    <td class="px-6 py-4">{{ o.client_phone }}</td>
+                    <td class="px-6 py-4">{{ (o.players || []).length }}</td>
+                    <td class="px-6 py-4">{{ formatPrice(o.total) }}</td>
+                    <td class="px-6 py-4">{{ formatPrice(o.advance_payment) }}</td>
+
+                    <td class="px-6 py-4">
+                        <span
+                            class="rounded-full px-2 py-1.5 text-xs font-medium"
+                            :class="o.status === 'pagado'
+                                ? 'bg-green-100 text-green-700'
+                                : 'bg-amber-100 text-amber-700'"
+                        >
+                            {{ o.status }}
+                        </span>
+                    </td>
+
+                    <td class="px-6 py-4">
+                        <button
+                            @click="view(o)"
+                            type="button"
+                            class="text-blue-600 hover:text-blue-800"
+                            title="Ver pedido"
+                            aria-label="Ver pedido"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                />
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943
+                                       7.523 5 12 5c4.478 0
+                                       8.268 2.943 9.542 7
+                                       -1.274 4.057-5.064 7
+                                       -9.542 7-4.477 0-8.268-2.943
+                                       -9.542-7z"
+                                />
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+
+                <tr v-if="!orders.length">
+                    <td colspan="7" class="px-6 py-4 text-center italic text-gray-400">
+                        Sin pedidos
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
             </div>
         </div>
     <Modal :show="showDetail" @close="showDetail = false">
@@ -70,8 +232,8 @@
                 <button @click="showDetail = false" class="text-gray-400 hover:text-gray-700 text-2xl leading-none">&times;</button>
             </div>
             <div class="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
-                <div class="flex gap-4">
-                    <div v-if="detail?.images?.length" class="w-1/2 flex-shrink-0">
+                <div class="flex flex-col md:flex-row gap-4">
+                    <div v-if="detail?.images?.length" class="w-full md:w-1/2 flex-shrink-0">
                         <img :src="detail.images[0]" class="w-full aspect-square object-cover rounded-lg border border-gray-200" />
                     </div>
                     <div class="flex-1 grid grid-cols-2 gap-3 text-sm">
@@ -86,7 +248,7 @@
                     </div>
                 </div>
                 <div class="overflow-x-auto w-full rounded-lg border border-gray-200">
-                    <table class="min-w-[640px] md:min-w-full text-sm">
+                    <table class="min-w-[900px] md:min-w-full text-sm">
                         <thead class="bg-gray-50"><tr><th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nombre</th><th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Dorsal</th><th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Talla camisa</th><th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Talla pantaloneta</th><th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Tipo</th></tr></thead>
                         <tbody class="divide-y divide-gray-100"><tr v-for="(pl,i) in (detail?.players||[])" :key="i"><td class="px-3 py-2 font-medium">{{ pl.name }}</td><td class="px-3 py-2">{{ pl.number }}</td><td class="px-3 py-2">{{ pl.size }}</td><td class="px-3 py-2">{{ pl.short_size }}</td><td class="px-3 py-2">{{ pl.type }}</td></tr></tbody>
                     </table>
@@ -129,6 +291,7 @@ const formatPrice = (v) => {
     return '$' + Math.round(n).toLocaleString('es-CO');
 };
 </script>
+
 
 
 

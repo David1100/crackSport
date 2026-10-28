@@ -9,8 +9,22 @@
                 <div v-if="loading" class="flex justify-center py-10">
                     <div class="animate-spin h-8 w-8 border-4 border-black border-t-transparent rounded-full"></div>
                 </div>
-                <div v-else class="bg-white shadow-sm sm:rounded-lg overflow-hidden overflow-x-auto w-full">
-                    <table class="min-w-[640px] md:min-w-full divide-y divide-gray-200">
+                <div v-else class="bg-white shadow-sm sm:rounded-lg">
+                    <div class="space-y-3 md:hidden">
+                        <div v-for="t in telas" :key="t.id" class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div class="flex items-center gap-3">
+                                <img v-if="t.main_photo" :src="t.main_photo" alt="" class="h-12 w-12 object-cover rounded" />
+                                <h3 class="break-words text-sm font-semibold text-gray-900">{{ t.name }}</h3>
+                            </div>
+                            <div class="mt-4 flex gap-2 border-t border-gray-100 pt-3">
+                                <button @click="openEdit(t)" class="flex-1 rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700">Editar</button>
+                                <button @click="remove(t.id)" class="flex-1 rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-700">Eliminar</button>
+                            </div>
+                        </div>
+                        <div v-if="!telas.length" class="py-8 text-center text-sm italic text-gray-400">Sin telas</div>
+                    </div>
+                    <div class="hidden overflow-x-auto md:block">
+                    <table class="min-w-[900px] md:min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Foto</th>
@@ -33,6 +47,7 @@
                     </table>
                 </div>
             </div>
+        </div>
         </div>
         <Modal :show="showModal" @close="closeModal">
             <div class="p-6">
@@ -153,6 +168,7 @@ const remove = async (id) => {
     await load();
 };
 </script>
+
 
 
 

@@ -2,15 +2,36 @@
     <AuthenticatedLayout title="Productos">
         <div class="py-6">
             <div class="max-w-7xl mx-auto">
-                <div class="flex items-center justify-between mb-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
                     <h2 class="text-xl font-bold">Productos</h2>
-                    <button @click="openCreate" class="px-4 py-2 bg-black text-white rounded-md text-sm font-medium hover:bg-gray-800">Nuevo</button>
+                    <div class="flex items-center gap-2">
+                        <input v-model="search" type="text" placeholder="Buscar producto o categoría..." class="border rounded px-2 py-1.5 text-sm pr-8" />
+                        <button @click="openCreate" class="px-4 py-2 bg-black text-white rounded-md text-sm font-medium hover:bg-gray-800">Nuevo</button>
+                    </div>
                 </div>
                 <div v-if="loading" class="flex justify-center py-10">
                     <div class="animate-spin h-8 w-8 border-4 border-black border-t-transparent rounded-full"></div>
                 </div>
-                <div v-else class="bg-white shadow-sm sm:rounded-lg overflow-hidden overflow-x-auto w-full">
-                    <table class="min-w-[640px] md:min-w-full divide-y divide-gray-200">
+                <div v-else class="bg-white shadow-sm sm:rounded-lg">
+                    <div class="space-y-3 md:hidden">
+                        <div v-for="p in filteredProducts" :key="p.id" class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div class="flex items-center gap-3">
+                                <img v-if="p.image" :src="p.image.startsWith('http')?p.image:p.image" alt="" class="h-12 w-12 object-cover rounded" />
+                                <div class="min-w-0 flex-1">
+                                    <h3 class="break-words text-sm font-semibold text-gray-900">{{ p.name }}</h3>
+                                    <p class="mt-1 text-xs text-gray-500">{{ p.category?.name }}</p>
+                                    <p class="mt-1 text-sm font-semibold text-gray-900">{{ p.price }}</p>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex gap-2 border-t border-gray-100 pt-3">
+                                <button @click="openEdit(p)" class="flex-1 rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700">Editar</button>
+                                <button @click="remove(p.id)" class="flex-1 rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-700">Eliminar</button>
+                            </div>
+                        </div>
+                        <div v-if="!filteredProducts.length" class="py-8 text-center text-sm italic text-gray-400">Sin productos</div>
+                    </div>
+                    <div class="hidden overflow-x-auto md:block">
+                    <table class="min-w-[900px] md:min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Imagen</th>
@@ -21,7 +42,7 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="p in products" :key="p.id">
+                            <tr v-for="p in filteredProducts" :key="p.id">
                                 <td class="px-6 py-4"><img v-if="p.image" :src="p.image.startsWith('http')?p.image:p.image" alt="" class="h-10 w-10 object-cover rounded" /></td>
                                 <td class="px-6 py-4">{{ p.name }}</td>
                                 <td class="px-6 py-4"><Link :href="`/categories`" class="text-blue-600 hover:underline">{{ p.category?.name }}</Link></td>
@@ -35,6 +56,7 @@
                     </table>
                 </div>
             </div>
+        </div>
         </div>
         <Modal :show="showModal" @close="showModal = false">
             <div class="p-6">
@@ -75,7 +97,7 @@
     </AuthenticatedLayout>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout.vue';
 import Modal from '../../Components/Modal.vue';
 import TextInput from '../../Components/TextInput.vue';
@@ -88,6 +110,12 @@ import { Link } from '@inertiajs/vue3';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 const products = ref([]);
+const search = ref('');
+const filteredProducts = computed(() => {
+    const q = search.value.trim().toLowerCase();
+    if (!q) return products.value;
+    return products.value.filter(p => (p.name || '').toLowerCase().includes(q) || (p.category?.name || '').toLowerCase().includes(q));
+});
 const loading = ref(true);
 const categories = ref([]);
 const showModal = ref(false);
@@ -132,6 +160,7 @@ const remove = async (id) => {
     Swal.fire({ icon: 'success', title: 'Eliminado', timer: 1500, showConfirmButton: false });
 };
 </script>
+
 
 
 

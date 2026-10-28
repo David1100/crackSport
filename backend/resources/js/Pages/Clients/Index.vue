@@ -15,7 +15,7 @@
                 <div v-else class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div v-for="d in clients" :key="d.id" class="relative group">
                         <img :src="d.image.startsWith('http')?d.image:d.image" alt="" class="w-full aspect-square object-cover rounded" />
-                        <button @click="remove(d.id)" class="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100">Eliminar</button>
+                        <button @click="remove(d.id)" class="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1.5 rounded opacity-0 group-hover:opacity-100">Eliminar</button>
                     </div>
                 </div>
             </div>
@@ -47,6 +47,7 @@ const remove = async (id) => {
     await load();
 };
 </script>
+
 
 
 

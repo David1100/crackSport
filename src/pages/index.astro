@@ -309,7 +309,7 @@ const clients = Array.from({ length: 6 }).map((_, i) => ({
 		const grid = document.getElementById('telas-grid');
 		grid.innerHTML = '';
 		data.forEach((t) => {
-		const mainPhoto = t.main_photo ? 'http://127.0.0.1:8000' + t.main_photo : '/logo_principal.webp';
+		const mainPhoto = t.main_photo ? 'https://backend.miplatillo.com' + t.main_photo : '/logo_principal.webp';
 			const card = document.createElement('article');
 			card.className = 'mb-4 group text-center break-inside-avoid';
 			card.innerHTML = '<div class="w-40 h-40 sm:w-48 sm:h-48 mx-auto rounded-full overflow-hidden border-4 border-black/10 group-hover:border-black transition"><img src="' + mainPhoto + '" alt="' + t.name + '" class="w-full h-full object-cover group-hover:scale-110 transition duration-300" /></div>' +
@@ -325,13 +325,13 @@ console.log('tela detail', t);
 					document.getElementById('tela-modal-title').textContent = t.name;
 					document.getElementById('tela-modal-desc').innerHTML = t.description || '';
 					const main = document.getElementById('tela-modal-main');
-					main.src = t.main_photo ? 'http://127.0.0.1:8000' + t.main_photo : '/logo_principal.webp';
+					main.src = t.main_photo ? 'https://backend.miplatillo.com' + t.main_photo : '/logo_principal.webp';
 					const photos = document.getElementById('tela-modal-photos');
 					console.log('photos container', photos, 'count', (t.photos||[]).length);
 					photos.innerHTML = '';
 					(t.photos || []).forEach((p) => {
 						const img = document.createElement('img');
-						img.src = p.startsWith('http') ? p : 'http://127.0.0.1:8000' + p;
+						img.src = p.startsWith('http') ? p : 'https://backend.miplatillo.com' + p;
 						img.className = 'w-full aspect-square object-cover rounded';
 						photos.appendChild(img);
 					});
@@ -347,7 +347,7 @@ console.log('tela detail', t);
 		const slider = document.getElementById('cat-slider');
 		slider.innerHTML = '';
 		(data.data ?? data).forEach((d) => {
-			const src = d.image.startsWith('http') ? d.image : 'http://127.0.0.1:8000' + d.image;
+			const src = d.image.startsWith('http') ? d.image : 'https://backend.miplatillo.com' + d.image;
 			const div = document.createElement('div');
 			div.className = 'group relative shrink-0 basis-[66%] sm:basis-[28%] aspect-[4/5] bg-black text-white flex items-end p-6 overflow-hidden snap-start';
 			const img = document.createElement('img');
@@ -367,7 +367,7 @@ console.log('tela detail', t);
 			const div = document.createElement('div');
 			div.className = 'shrink-0 w-40 aspect-square overflow-hidden bg-neutral-200 group snap-start';
 			const img = document.createElement('img');
-			const src = cl.image.startsWith('http') ? cl.image : 'http://127.0.0.1:8000' + cl.image;
+			const src = cl.image.startsWith('http') ? cl.image : 'https://backend.miplatillo.com' + cl.image;
 			img.src = src;
 			img.alt = cl.name || '';
 			img.className = 'w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500 cursor-pointer';
@@ -384,7 +384,7 @@ console.log('tela detail', t);
 			const div = document.createElement('div');
 			div.className = 'relative shrink-0 basis-[40%] overflow-hidden snap-start';
 			const img = document.createElement('img');
-			img.src = c.photo ? (c.photo.startsWith('http') ? c.photo : 'http://127.0.0.1:8000' + c.photo) : '/combos/combo_01.jpeg';
+			img.src = c.photo ? (c.photo.startsWith('http') ? c.photo : 'https://backend.miplatillo.com' + c.photo) : '/combos/combo_01.jpeg';
 			img.alt = c.name;
 			img.className = 'w-full h-full aspect-[4/5] object-cover';
 			const p = document.createElement('p');
