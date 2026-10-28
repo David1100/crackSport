@@ -116,10 +116,10 @@ const clients = Array.from({ length: 6 }).map((_, i) => ({
 			<h2 class="text-3xl sm:text-4xl font-black uppercase mb-2">Rendimiento y estilo en combo</h2>
 			<p class="text-neutral-600 mb-6">Equipamiento completo para tus entrenamientos con la comodidad y el precio que buscas.</p>
 			<div id="combos-slider" class="flex gap-2 overflow-x-auto pb-4 scrollbar-hide snap-x">
-				<div class="relative shrink-0 basis-[40%] overflow-hidden snap-start bg-neutral-200 animate-pulse aspect-[4/5]"></div>
-				<div class="relative shrink-0 basis-[40%] overflow-hidden snap-start bg-neutral-200 animate-pulse aspect-[4/5]"></div>
-				<div class="relative shrink-0 basis-[40%] overflow-hidden snap-start bg-neutral-200 animate-pulse aspect-[4/5]"></div>
-				<div class="relative shrink-0 basis-[40%] overflow-hidden snap-start bg-neutral-200 animate-pulse aspect-[4/5]"></div>
+				<div class="relative shrink-0 basis-[66%] sm:basis-[40%] overflow-hidden snap-start bg-neutral-200 animate-pulse aspect-[4/5]"></div>
+				<div class="relative shrink-0 basis-[66%] sm:basis-[40%] overflow-hidden snap-start bg-neutral-200 animate-pulse aspect-[4/5]"></div>
+				<div class="relative shrink-0 basis-[66%] sm:basis-[40%] overflow-hidden snap-start bg-neutral-200 animate-pulse aspect-[4/5]"></div>
+				<div class="relative shrink-0 basis-[66%] sm:basis-[40%] overflow-hidden snap-start bg-neutral-200 animate-pulse aspect-[4/5]"></div>
 			</div>
 		</section>
 
@@ -382,13 +382,13 @@ console.log('tela detail', t);
 		slider.innerHTML = '';
 		(data.data ?? data).forEach((c) => {
 			const div = document.createElement('div');
-			div.className = 'relative shrink-0 basis-[40%] overflow-hidden snap-start';
+			div.className = 'relative shrink-0 basis-[66%] sm:basis-[40%] overflow-hidden snap-start';
 			const img = document.createElement('img');
 			img.src = c.photo ? (c.photo.startsWith('http') ? c.photo : 'https://backend.miplatillo.com' + c.photo) : '/combos/combo_01.jpeg';
 			img.alt = c.name;
 			img.className = 'w-full h-full aspect-[4/5] object-cover';
 			const p = document.createElement('p');
-			p.className = 'absolute bottom-0 inset-x-0 p-4 text-center font-bold uppercase bg-white/60 backdrop-blur';
+			p.className = 'absolute bottom-0 inset-x-0 p-2 sm:p-4 text-center text-sm sm:text-base font-bold uppercase bg-white/60 backdrop-blur';
 			p.textContent = c.name;
 			img.style.cursor = 'pointer';
 			img.addEventListener('click', () => {

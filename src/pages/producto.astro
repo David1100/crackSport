@@ -13,9 +13,9 @@ import '../styles/global.css';
 		const id = params.get('id');
 		fetch('https://backend.miplatillo.com/api/products/' + id).then((r) => r.json()).then((p) => {
 			const container = document.getElementById('product');
-			const img = p.image ? (p.image.startsWith('http') ? p.image : 'http://127.0.0.1:8000' + p.image) : '/logo_principal.webp';
+			const img = p.image ? (p.image.startsWith('http') ? p.image : 'https://backend.miplatillo.com' + p.image) : '/logo_principal.webp';
 			const price = Number(p.price).toLocaleString('es-CO', { maximumFractionDigits: 0 });
-			const allImages = [img].concat((p.images || []).map((im) => im.startsWith('http') ? im : 'http://127.0.0.1:8000' + im));
+			const allImages = [img].concat((p.images || []).map((im) => im.startsWith('http') ? im : 'https://backend.miplatillo.com' + im));
 			const gallery = allImages.map((src) => {
 				return '<img src="' + src + '" class="w-full aspect-square object-cover rounded cursor-pointer" onclick="document.getElementById(\'main-img\').src=\'' + src + '\'" />';
 			}).join('');
