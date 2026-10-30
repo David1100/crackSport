@@ -222,7 +222,7 @@
 
             </div>
         </div>
-    <Modal :show="showDetail" @close="showDetail = false">
+    <Modal :show="showDetail" max-width="4xl" @close="showDetail = false">
         <div class="p-0">
             <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex items-center justify-between">
                 <div>

@@ -30,6 +30,7 @@ class OrderController extends Controller
             'sock_quality' => 'nullable|string|max:50',
             'collar_type' => 'nullable|string|max:50',
             'delivered' => 'nullable|boolean',
+            'estimated_delivery' => 'nullable|date',
             'order_type' => 'nullable|string|max:20',
             'product_id' => 'nullable|integer',
             'product_name' => 'nullable|string|max:255',
@@ -43,6 +44,7 @@ class OrderController extends Controller
                 $images[] = Storage::url($path);
             }
         }
+        if (isset($data['estimated_delivery'])) $data['estimated_delivery'] = $data['estimated_delivery'];
         $data['images'] = $images;
         $players = [];
         if (isset($data['players'])) {
@@ -96,7 +98,9 @@ class OrderController extends Controller
             'sock_quality' => 'nullable|string|max:50',
             'collar_type' => 'nullable|string|max:50',
             'status' => 'nullable|string|max:50',
+            'estimated_delivery' => 'nullable|date',
             'delivered' => 'nullable|boolean',
+            'estimated_delivery' => 'nullable|date',
             'order_type' => 'nullable|string|max:20',
             'product_id' => 'nullable|integer',
             'product_name' => 'nullable|string|max:255',
@@ -114,6 +118,7 @@ class OrderController extends Controller
         if (array_key_exists('sock_quality', $data)) $order->sock_quality = $data['sock_quality'];
         if (array_key_exists('collar_type', $data)) $order->collar_type = $data['collar_type'];
         if (array_key_exists('delivered', $data)) $order->delivered = $data['delivered'];
+        if (array_key_exists('estimated_delivery', $data)) $order->estimated_delivery = $data['estimated_delivery'];
         if (array_key_exists('order_type', $data)) $order->order_type = $data['order_type'];
         if (array_key_exists('product_id', $data)) $order->product_id = $data['product_id'];
         if (array_key_exists('product_name', $data)) $order->product_name = $data['product_name'];

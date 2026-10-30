@@ -1,0 +1,232 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Mi pedido — CRS Sport">
+  <main class="min-h-screen bg-neutral-50 text-neutral-900 font-sans">
+    <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <header class="mb-8">
+        <p class="text-xs uppercase tracking-[0.3em] text-neutral-500 mb-2">CRS Sport</p>
+        <h1 class="text-4xl sm:text-5xl font-black uppercase tracking-tight">Mi pedido</h1>
+        <p class="mt-2 text-neutral-600">Ingresa tu número de teléfono para consultar el estado y los jugadores de tu pedido.</p>
+      </header>
+
+      <div class="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6 mb-6">
+        <label class="block text-sm font-medium text-neutral-700 mb-2">Número de teléfono</label>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input id="phone" type="tel" placeholder="Ej: 3001234567" class="flex-1 rounded-lg border border-neutral-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black focus:border-black" />
+          <button id="search" class="px-6 py-3 bg-black text-white font-bold uppercase tracking-wide rounded-lg hover:bg-neutral-800 transition">Buscar</button>
+        </div>
+        <p id="msg" class="text-sm mt-3"></p>
+      </div>
+
+      <div id="result" class="hidden space-y-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <p class="text-xs uppercase tracking-wide text-neutral-500">Cliente</p>
+              <p id="client" class="text-xl font-bold"></p>
+              <p class="text-sm text-neutral-500 mt-1">Teléfono: <span id="phoneShow"></span></p>
+            </div>
+            <div class="flex flex-wrap gap-3">
+              <div class="bg-neutral-100 rounded-xl px-4 py-3 text-center min-w-[110px]">
+                <p class="text-xs uppercase text-neutral-500">Estado</p>
+                <p id="status" class="font-bold text-neutral-900"></p>
+              </div>
+              <div class="bg-neutral-100 rounded-xl px-4 py-3 text-center min-w-[150px]">
+                <p class="text-xs uppercase text-neutral-500">Entrega estimada</p>
+                <p id="delivery" class="font-bold text-neutral-900"></p>
+              </div>
+              <div class="bg-neutral-100 rounded-xl px-4 py-3 text-center min-w-[110px]">
+                <p class="text-xs uppercase text-neutral-500">Total</p>
+                <p id="total" class="font-bold text-neutral-900"></p>
+              </div>
+              <div class="bg-neutral-100 rounded-xl px-4 py-3 text-center min-w-[110px]">
+                <p class="text-xs uppercase text-neutral-500">Abono</p>
+                <p id="advance" class="font-bold text-green-600"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-2xl font-black uppercase tracking-tight">Jugadores</h2>
+            <span id="count" class="text-sm text-neutral-500"></span>
+          </div>
+          <div class="overflow-x-auto rounded-xl border border-neutral-200">
+            <table class="min-w-full text-sm">
+              <thead class="bg-neutral-900 text-white">
+                <tr>
+                  <th class="px-3 py-3 text-left font-semibold">Nombre</th>
+                  <th class="px-3 py-3 text-left font-semibold">Dorsal</th>
+                  <th class="px-3 py-3 text-left font-semibold">Talla camisa</th>
+                  <th class="px-3 py-3 text-left font-semibold">Talla pantaloneta</th>
+                  <th class="px-3 py-3 text-left font-semibold">Tipo</th>
+                  <th class="px-3 py-3 text-left font-semibold">Detalles</th>
+                </tr>
+              </thead>
+              <tbody id="players" class="divide-y divide-neutral-100"></tbody>
+            </table>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-3 mt-6">
+            <button id="addPlayer" class="px-4 py-3 border-2 border-neutral-300 rounded-lg font-bold hover:border-black hover:bg-neutral-50 transition">+ Agregar jugador</button>
+            <button id="save" class="px-4 py-3 bg-black text-white font-bold uppercase tracking-wide rounded-lg hover:bg-neutral-800 transition">Guardar cambios</button>
+            <button id="prod" class="px-4 py-3 bg-green-600 text-white font-bold uppercase tracking-wide rounded-lg hover:bg-green-700 transition">Todo está bien, pasar a producción</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const API = 'https://backend.miplatillo.com/api/orders';
+    let orderId = null;
+    let order = null;
+    const phoneInput = document.getElementById('phone');
+    const searchBtn = document.getElementById('search');
+    const result = document.getElementById('result');
+    const playersTbody = document.getElementById('players');
+    const msg = document.getElementById('msg');
+
+    function renderPlayers(players) {
+      playersTbody.innerHTML = '';
+      (players || []).forEach((p, i) => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-neutral-50';
+        tr.innerHTML = `
+          <td class="px-3 py-2"><input data-f="name" value="${p.name||''}" class="border border-neutral-300 rounded px-2 py-1 w-32 uppercase focus:outline-none focus:ring-1 focus:ring-black" /></td>
+          <td class="px-3 py-2"><input data-f="number" value="${p.number||''}" class="border border-neutral-300 rounded px-2 py-1 w-16 focus:outline-none focus:ring-1 focus:ring-black" /></td>
+          <td class="px-3 py-2"><input data-f="size" value="${p.size||''}" class="border border-neutral-300 rounded px-2 py-1 w-16 focus:outline-none focus:ring-1 focus:ring-black" /></td>
+          <td class="px-3 py-2"><input data-f="short_size" value="${p.short_size||''}" class="border border-neutral-300 rounded px-2 py-1 w-16 focus:outline-none focus:ring-1 focus:ring-black" /></td>
+          <td class="px-3 py-2">
+            <select data-f="type" class="border border-neutral-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-black">
+              <option value="jugador" ${p.type==='jugador'?'selected':''}>Jugador</option>
+              <option value="arquero" ${p.type==='arquero'?'selected':''}>Arquero</option>
+            </select>
+          </td>
+          <td class="px-3 py-2"><input data-f="details" value="${p.details||''}" class="border border-neutral-300 rounded px-2 py-1 w-40 focus:outline-none focus:ring-1 focus:ring-black" /></td>
+          <td class="hidden"><input type="hidden" data-f="ready" value="${p.ready?'1':'0'}" /></td>
+        `;
+        playersTbody.appendChild(tr);
+      });
+      document.getElementById('count').textContent = (players || []).length + ' jugador(es)';
+    }
+
+    function collectPlayers() {
+      const rows = playersTbody.querySelectorAll('tr');
+      const players = [];
+      rows.forEach((tr) => {
+        const get = (f) => {
+          const el = tr.querySelector(`[data-f="${f}"]`);
+          if (!el) return '';
+          if (el.type === 'checkbox') return el.checked;
+          return el.value;
+        };
+        players.push({
+          name: get('name'),
+          number: get('number'),
+          size: get('size'),
+          short_size: get('short_size'),
+          type: get('type'),
+          details: get('details'),
+          ready: get('ready') === '1' || get('ready') === true,
+        });
+      });
+      return players;
+    }
+
+    searchBtn.addEventListener('click', async () => {
+      msg.textContent = '';
+      msg.className = 'text-sm mt-3';
+      const phone = phoneInput.value.trim();
+      if (!phone) { msg.textContent = 'Ingresa tu teléfono'; msg.classList.add('text-red-600'); return; }
+      try {
+        const res = await fetch(API);
+        const data = await res.json();
+        const orders = data.data ?? data;
+        const norm = (s) => (s || '').replace(/\D/g, '');
+        const found = (orders || []).find(o => norm(o.client_phone) === norm(phone));
+        if (!found) {
+          const phones = (orders || []).map(o => o.client_phone).filter(Boolean);
+          msg.textContent = 'No se encontró pedido. Pedidos: ' + (orders||[]).length;
+          msg.classList.add('text-red-600');
+          console.log('phones', phones);
+          return;
+        }
+        orderId = found.id;
+        order = found;
+        document.getElementById('client').textContent = found.client_name || '';
+        document.getElementById('phoneShow').textContent = found.client_phone || '';
+        document.getElementById('status').textContent = found.status || '';
+        document.getElementById('delivery').textContent = found.estimated_delivery || 'Por definir';
+        document.getElementById('total').textContent = found.total ? '$' + Number(found.total).toLocaleString('es-CO') : '';
+        document.getElementById('advance').textContent = found.advance_payment ? '$' + Number(found.advance_payment).toLocaleString('es-CO') : '';
+        renderPlayers(found.players || []);
+        result.classList.remove('hidden');
+      } catch (e) {
+        msg.textContent = 'Error al buscar: ' + e.message;
+        msg.classList.add('text-red-600');
+      }
+    });
+
+    document.getElementById('addPlayer').addEventListener('click', () => {
+      const players = collectPlayers();
+      players.push({ name: '', number: '', size: '', short_size: '', type: 'jugador', details: '', ready: false });
+      renderPlayers(players);
+    });
+
+    async function save(players, status) {
+      if (!orderId) return;
+      const fd = new FormData();
+      fd.append('client_name', order.client_name || '');
+      if (order.client_phone) fd.append('client_phone', order.client_phone);
+      if (order.notes) fd.append('notes', order.notes);
+      if (order.advance_payment !== '' && order.advance_payment !== null) fd.append('advance_payment', order.advance_payment);
+      if (order.total !== '' && order.total !== null) fd.append('total', order.total);
+      if (order.shirt_fabric) fd.append('shirt_fabric', order.shirt_fabric);
+      if (order.short_fabric) fd.append('short_fabric', order.short_fabric);
+      if (order.sock_quality) fd.append('sock_quality', order.sock_quality);
+      if (order.collar_type) fd.append('collar_type', order.collar_type);
+      fd.append('order_type', order.order_type || 'team');
+      if (order.product_id) fd.append('product_id', order.product_id);
+      if (order.product_name) fd.append('product_name', order.product_name);
+      if (order.quantity) fd.append('quantity', order.quantity);
+      if (order.size) fd.append('size', order.size);
+      if (order.status) fd.append('status', order.status);
+      if (order.estimated_delivery) fd.append('estimated_delivery', order.estimated_delivery);
+      if (status) fd.append('status', status);
+      (order.images || []).forEach(u => fd.append('keep_images[]', u));
+      players.forEach((p, i) => {
+        fd.append(`players[${i}][name]`, (p.name || '').toUpperCase());
+        fd.append(`players[${i}][number]`, p.number || '');
+        fd.append(`players[${i}][size]`, (p.size || '').toUpperCase());
+        fd.append(`players[${i}][short_size]`, (p.short_size || '').toUpperCase());
+        fd.append(`players[${i}][type]`, p.type || 'jugador');
+        fd.append(`players[${i}][details]`, p.details || '');
+        fd.append(`players[${i}][ready]`, p.ready ? '1' : '0');
+      });
+      fd.append('_method', 'PUT');
+      try {
+        const res = await fetch(`${API}/${orderId}`, { method: 'POST', body: fd });
+        const updated = await res.json();
+        order = updated;
+        document.getElementById('status').textContent = updated.status || '';
+        document.getElementById('delivery').textContent = updated.estimated_delivery || 'Por definir';
+        renderPlayers(updated.players || []);
+        msg.textContent = 'Guardado correctamente';
+        msg.className = 'text-sm mt-3 text-green-600';
+      } catch (e) {
+        msg.textContent = 'Error al guardar: ' + e.message;
+        msg.className = 'text-sm mt-3 text-red-600';
+      }
+    }
+
+    document.getElementById('save').addEventListener('click', () => save(collectPlayers()));
+    document.getElementById('prod').addEventListener('click', () => {
+      const players = collectPlayers().map(p => ({ ...p, ready: true }));
+      renderPlayers(players);
+      save(players, 'en_produccion');
+    });
+  </script>
+</Layout>

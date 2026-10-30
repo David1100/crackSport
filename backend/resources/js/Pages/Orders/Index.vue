@@ -240,6 +240,20 @@
                             <TextInput v-model="form.advance_payment" type="number" step="0.01" class="mt-1 block w-full rounded-lg border-gray-300 focus:border-black focus:ring-black" />
                         </div>
                     </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <InputLabel value="Estado" />
+                            <select v-model="form.status" class="mt-1 block w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+                                <option value="confirmado">Confirmado</option>
+                                <option value="en_produccion">En producción</option>
+                                <option value="terminado">Terminado</option>
+                            </select>
+                        </div>
+                        <div>
+                            <InputLabel value="Fecha estimada de entrega" />
+                            <TextInput v-model="form.estimated_delivery" type="date" class="mt-1 block w-full rounded-lg border-gray-300 focus:border-black focus:ring-black" />
+                        </div>
+                    </div>
                     <div>
                         <InputLabel value="Notas" />
                         <textarea v-model="form.notes" rows="3" class="mt-1 block w-full rounded-lg border-gray-300 focus:border-black focus:ring-black" placeholder="Observaciones del pedido..."></textarea>
@@ -251,16 +265,18 @@
                 </form>
             </div>
         </Modal>
-        <Modal :show="showDetail" @close="showDetail = false">
+        <Modal :show="showDetail" max-width="4xl" @close="showDetail = false">
             <div class="p-0">
                 <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50">
                     <div>
                         <h3 class="text-lg font-semibold text-gray-900">Orden de pedido</h3>
                         <p class="text-sm text-gray-700 font-medium">{{ detail?.client_name }}</p>
                         <p class="text-sm text-gray-500">{{ detail?.client_phone }}</p>
+                        <p class="text-sm text-gray-700">Estado: <strong>{{ detail?.status }}</strong></p>
+                        <p class="text-sm text-gray-700">Entrega estimada: <strong>{{ detail?.estimated_delivery || 'Por definir' }}</strong></p>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button @click="exportPdf" class="px-3 py-1.5.5 text-sm bg-black text-white rounded-md hover:bg-gray-800">Exportar PDF</button>
+                        <button @click="exportPdf" class="px-3 py-2 text-sm bg-black text-white rounded-md hover:bg-gray-800">Exportar PDF</button>
                         <button @click="showDetail = false" class="text-gray-400 hover:text-gray-700 text-2xl leading-none">&times;</button>
                     </div>
                 </div>
@@ -388,7 +404,7 @@ const showDetail = ref(false);
 const detailImageIndex = ref(0);
 const detail = ref(null);
 const errors = ref({});
-const form = ref({ client_name: '', client_phone: '', notes: '', advance_payment: '', total: '', shirt_fabric: '', short_fabric: '', sock_quality: '', collar_type: '', order_type: 'team', product_id: '', product_name: '', quantity: '', size: '' });
+const form = ref({ client_name: '', client_phone: '', notes: '', advance_payment: '', total: '', shirt_fabric: '', short_fabric: '', sock_quality: '', collar_type: '', order_type: 'team', product_id: '', product_name: '', quantity: '', size: '', status: 'confirmado', estimated_delivery: '' });
 const images = ref([]);
 const existingImages = ref([]);
 const players = ref([]);
@@ -396,7 +412,7 @@ const load = async () => { loading.value = true; try { const { data } = await ax
 const loadTelas = async () => { try { const { data } = await axios.get('/api/telas'); telas.value = data.data ?? data; } catch (e) {} };
 const loadProducts = async () => { try { const { data } = await axios.get('/api/products'); products.value = data.data ?? data; } catch (e) {} };
 onMounted(() => { load(); loadTelas(); loadProducts(); });
-const openCreate = () => { editingId.value = null; showModal.value = true; form.value = { client_name: '', client_phone: '', notes: '', advance_payment: '', total: '', shirt_fabric: '', short_fabric: '', sock_quality: '', collar_type: '', order_type: 'team', product_id: '', product_name: '', quantity: '', size: '' }; images.value = []; existingImages.value = []; players.value = []; errors.value = {}; };
+const openCreate = () => { editingId.value = null; showModal.value = true; form.value = { client_name: '', client_phone: '', notes: '', advance_payment: '', total: '', shirt_fabric: '', short_fabric: '', sock_quality: '', collar_type: '', order_type: 'team', product_id: '', product_name: '', quantity: '', size: '', status: 'confirmado', estimated_delivery: '' }; images.value = []; existingImages.value = []; players.value = []; errors.value = {}; };
 const onImages = (e) => { images.value = Array.from(e.target.files || []); };
 const addPlayer = () => { players.value.push({ name: '', number: '', size: '', short_size: '', type: 'jugador', details: '', ready: false }); };
 const onProductChange = () => {
@@ -415,6 +431,8 @@ const submit = async () => {
     if (form.value.short_fabric) fd.append('short_fabric', form.value.short_fabric);
     if (form.value.sock_quality) fd.append('sock_quality', form.value.sock_quality);
     if (form.value.collar_type) fd.append('collar_type', form.value.collar_type);
+    if (form.value.status) fd.append('status', form.value.status);
+    if (form.value.estimated_delivery) fd.append('estimated_delivery', form.value.estimated_delivery);
     fd.append('order_type', form.value.order_type || 'team');
     if (form.value.product_id) fd.append('product_id', form.value.product_id);
     if (form.value.product_name) fd.append('product_name', form.value.product_name);
@@ -523,7 +541,9 @@ const edit = (o) => {
         product_id: o.product_id || '',
         product_name: o.product_name || '',
         quantity: o.quantity || '',
-        size: o.size || ''
+        size: o.size || '',
+        status: o.status || 'confirmado',
+        estimated_delivery: o.estimated_delivery || ''
     };
     images.value = [];
     existingImages.value = [...(o.images || [])];
